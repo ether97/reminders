@@ -14,7 +14,7 @@ model User {
   id                String @id @default(auto()) @map("_id") @db.ObjectId
   email             String? @unique
   name              String?
-  emailVerified     String
+  emailVerified     DateTime?
   hashedPassword    String?
   image             String?
   createdAt         DateTime @default(now())
@@ -30,7 +30,7 @@ model Reminder {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
   recurring         Boolean @default(false)
-  reccuringFreq     Int?
+  recurringFreq     Int?
   priority          Priority @default(MEDIUM)
   title             String
   description       String?
