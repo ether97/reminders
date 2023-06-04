@@ -4,13 +4,14 @@ import { SubCategories } from "../types/types";
 import Subcategory from "./Subcategory";
 
 interface CategoryProps {
+  category: string;
   subCategories?: SubCategories[];
 }
 
-const Category: React.FC<CategoryProps> = ({ subCategories }) => {
+const Category: React.FC<CategoryProps> = ({ subCategories, category }) => {
   return (
     <div className="flex flex-col w-full py-4 px-5">
-      <h1>Create</h1>
+      <h1>{category}</h1>
       {subCategories?.map((subcategory) => (
         <Subcategory
           key={subcategory.label}
