@@ -1,5 +1,6 @@
 "use client";
 
+import { User } from "@prisma/client";
 import { IChildren } from "../types/types";
 import Category from "./Category";
 import { MdOutlineNewLabel } from "react-icons/md";
@@ -11,25 +12,27 @@ const subCategories = [
   },
 ];
 
-const Sidebar: React.FC<IChildren> = ({ children }) => {
+const Sidebar: React.FC<IChildren & { currentUser: User | null }> = ({
+  children,
+  currentUser,
+}) => {
   return (
-    <div className="flex flex-row h-full">
+    <div className="flex flex-row h-full divide-x divide-neutral-800">
       <div
         className="
-      w-[300px]
-      hidden
-      md:flex
-      flex-col
-      p-2
-      bg-black
-      "
+        w-[250px]
+        hidden
+        md:flex
+        flex-col
+        p-2
+        "
       >
         <div className="flex flex-col gap-y-2 w-full">
-          <Category subCategories={subCategories} />
-          <Category />
+          <Category category="Create" subCategories={subCategories} />
+          <Category category="Reminders" />
         </div>
       </div>
-      <main className="h-full flex-1 bg-neutral-800">{children}</main>
+      <main className="h-full flex-1">{children}</main>
     </div>
   );
 };
