@@ -5,6 +5,7 @@ export interface IChildren {
 }
 
 export type SubCategories = {
+  category?: string;
   label: string;
   icon: IconType;
 };

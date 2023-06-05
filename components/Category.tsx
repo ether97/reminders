@@ -5,25 +5,25 @@ import Subcategory from "./Subcategory";
 import React from "react";
 
 interface CategoryProps {
-  category: string | React.ReactElement;
-  subCategories?: SubCategories[];
+  category?: string | React.ReactElement;
+  subCategory?: SubCategories;
   onClick?: () => void;
 }
 
 const Category: React.FC<CategoryProps> = ({
-  subCategories,
+  subCategory,
   category: Category,
 }) => {
   return (
     <div className="flex flex-col w-full py-4 px-5">
-      <h1>{Category}</h1>
-      {subCategories?.map((subcategory) => (
+      {Category && <h1>{Category}</h1>}
+      {subCategory && (
         <Subcategory
-          key={subcategory.label}
-          icon={subcategory.icon}
-          label={subcategory.label}
+          key={subCategory.label}
+          icon={subCategory.icon}
+          label={subCategory.label}
         />
-      ))}
+      )}
     </div>
   );
 };

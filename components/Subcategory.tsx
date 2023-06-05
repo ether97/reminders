@@ -32,11 +32,14 @@ const Subcategory: React.FC<SubcategoryProps> = ({ icon: Icon, label }) => {
 
   return (
     <div
-      className="inline-flex gap-x-2 p-2 cursor-pointer "
+      className="flex flex-row gap-3 items-center w-full px-5 rounded-md text-md hover:bg-lightbackground py-1 group hover:text-zinc-400 transition duration-500 cursor-pointer"
       // onClick={handleClick}
     >
-      <Icon size={24} className="text-foreground" />
-      <p className="w-full text-md font-md hover:text-white transition text-zinc-400">
+      <Icon
+        size={30}
+        className="text-lightbackground group-hover:text-darkbackground transition "
+      />
+      <p className="w-full text-md font-md hover:text-zinc-400 transition text-white">
         {label}
       </p>
     </div>

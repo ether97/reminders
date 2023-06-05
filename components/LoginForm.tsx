@@ -6,6 +6,7 @@ import * as z from "zod";
 import { SubmitHandler, useForm, UseFormRegister } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import ErrorMessage from "./ErrorMessage";
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
@@ -46,8 +47,9 @@ const LoginForm = () => {
         placeholder="Email"
       />
       {errors.email && (
-        <span className="text-red-800 block">{errors.email?.message}</span>
+        <ErrorMessage message={errors.email?.message} type="email" />
       )}
+
       <Input
         type="password"
         id="password"
@@ -55,7 +57,7 @@ const LoginForm = () => {
         placeholder="Password"
       />
       {errors.password && (
-        <span className="text-red-800 block">{errors.password?.message}</span>
+        <ErrorMessage message={errors.password?.message} type="password" />
       )}
       <Button
         type="submit"

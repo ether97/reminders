@@ -4,6 +4,8 @@ import prisma from "../../lib/prismadb";
 
 import bcrypt from "bcrypt";
 
+import { Priority } from "@prisma/client";
+
 export async function POST(request: Request) {
   const body = await request.json();
   const { email, name, emailVerified, password } = body;
@@ -18,6 +20,17 @@ export async function POST(request: Request) {
       emailVerified: emailVerified,
       name: name,
       hashedPassword: hashedPassword,
+    },
+  });
+
+  const reminder = await prisma.reminder.create({
+    data: {
+      userId: user.id,
+      title: "handle Atmaja",
+      description: "shes throwing a tantrum",
+      recurring: true,
+      priority: Priority.HIGH,
+      recurringFreq: 1,
     },
   });
 
