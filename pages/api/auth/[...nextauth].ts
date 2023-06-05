@@ -1,6 +1,6 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth, { AuthOptions } from "next-auth";
-import prisma from "../../../app/libs/prismadb";
+import prisma from "../../../app/lib/prismadb";
 
 import GithubProvier from "next-auth/providers/github";
 import GoogleProvier from "next-auth/providers/google";
@@ -30,7 +30,7 @@ export const authOptions: AuthOptions = {
           throw new Error("invalid credentials");
         }
 
-        console.log(credentials.password);
+        console.log(credentials);
 
         const user = await prisma.user.findUnique({
           where: {
@@ -42,14 +42,14 @@ export const authOptions: AuthOptions = {
           throw new Error("user doesnt exist or no hashed password");
         }
 
-        // const isCorrect = await bcrypt.compare(
-        //   user.hashedPassword,
-        //   credentials.password
-        // );
+        const isCorrect = await bcrypt.compare(
+          user.hashedPassword,
+          credentials.password
+        );
 
-        // if (!isCorrect) {
-        //   throw new Error("invalid password!");
-        // }
+        if (!isCorrect) {
+          throw new Error("invalid password!");
+        }
 
         return user;
       },

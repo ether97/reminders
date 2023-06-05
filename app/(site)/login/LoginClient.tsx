@@ -7,10 +7,13 @@ import { toast } from "react-hot-toast";
 import { signIn } from "next-auth/react";
 
 import { FieldValues, useForm, SubmitHandler } from "react-hook-form";
-import Input from "@/app/components/Input";
+import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
 
 const LoginClient = () => {
   const router = useRouter();
+
+  const { theme, setTheme } = useTheme();
 
   const {
     register,
@@ -41,9 +44,8 @@ const LoginClient = () => {
 
   return (
     <div>
-      <Input type="text" id="email" register={register} required />
-      <Input type="text" id="password" register={register} required />
-      <button onClick={handleSubmit(onSubmit)}>Login Button</button>
+      <Button onClick={() => setTheme("light")}>Light</Button>
+      <Button onClick={() => setTheme("dark")}>Dark</Button>
     </div>
   );
 };

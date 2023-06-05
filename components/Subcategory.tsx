@@ -14,28 +14,28 @@ interface SubcategoryProps {
 }
 
 const Subcategory: React.FC<SubcategoryProps> = ({ icon: Icon, label }) => {
-  const handleClick = async () => {
-    const response = await axios.post<Reminder>("/api/reminders", {
-      title: "handle Atmaja",
-      description: "shes throwing a tantrum",
-      recurring: true,
-      priority: Priority.HIGH,
-      recurringFreq: 1,
-    });
+  // const handleClick = async () => {
+  //   const response = await axios.post<Reminder>("/api/reminders", {
+  //     title: "handle Atmaja",
+  //     description: "shes throwing a tantrum",
+  //     recurring: true,
+  //     priority: Priority.HIGH,
+  //     recurringFreq: 1,
+  //   });
 
-    if (response.status === 200) {
-      toast.success("reminder added!");
-    } else {
-      toast.error("error adding reminder!");
-    }
-  };
+  //   if (response.status === 200) {
+  //     toast.success("reminder added!");
+  //   } else {
+  //     toast.error("error adding reminder!");
+  //   }
+  // };
 
   return (
     <div
       className="inline-flex gap-x-2 p-2 cursor-pointer "
-      onClick={handleClick}
+      // onClick={handleClick}
     >
-      <Icon size={24} className="text-white" />
+      <Icon size={24} className="text-foreground" />
       <p className="w-full text-md font-md hover:text-white transition text-zinc-400">
         {label}
       </p>

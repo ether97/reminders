@@ -1,8 +1,9 @@
-import Sidebar from "./components/Sidebar";
+import Sidebar from "../components/Sidebar";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import ToasterProvider from "./libs/Toast";
+import ToasterProvider from "./lib/Toast";
 import getCurrentUser from "./actions/getCurrentUser";
+import Providers from "./providers/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,10 +20,12 @@ export default async function RootLayout({
   const currentUser = await getCurrentUser();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ToasterProvider />
-        <Sidebar currentUser={currentUser}>{children}</Sidebar>
+        <Providers>
+          <Sidebar currentUser={currentUser}>{children}</Sidebar>
+        </Providers>
       </body>
     </html>
   );

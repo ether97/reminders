@@ -2,16 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-body,
-html,
-:root {
-  height: 100%;
-  background-color: black;
-  color-scheme: dark;
-}
-
 * {
   box-sizing: border-box;
-  margin: 0;
   padding: 0;
+  margin: 0;
+}
+
+html,
+body,
+:root {
+  height: 100%;
+  background-color: #082f49;
+}
+
+@layer base {
+  :root {
+    --background: "#172554";
+    --foreground: "yellow";
+  }
+
+  .dark {
+    --background: "yellow";
+  }
 }
