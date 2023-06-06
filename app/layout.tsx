@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import ToasterProvider from "./lib/Toast";
 import getCurrentUser from "./actions/getCurrentUser";
 import Providers from "./providers/Providers";
+import getReminders from "./actions/getReminders";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,6 +19,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const currentUser = await getCurrentUser();
+  const reminders = await getReminders();
 
   return (
     <html lang="en" suppressHydrationWarning>
