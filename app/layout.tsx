@@ -26,7 +26,9 @@ export default async function RootLayout({
       <body className={inter.className}>
         <ToasterProvider />
         <Providers>
-          <Sidebar currentUser={currentUser}>{children}</Sidebar>
+          <Sidebar currentUser={currentUser} reminders={reminders}>
+            {children}
+          </Sidebar>
         </Providers>
       </body>
     </html>
