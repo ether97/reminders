@@ -38,14 +38,20 @@ export const authOptions: AuthOptions = {
           },
         });
 
+        console.log(user);
+
         if (!user || !user?.hashedPassword) {
           throw new Error("user doesnt exist or no hashed password");
         }
 
+        console.log(user.hashedPassword, credentials.password);
+
         const isCorrect = await bcrypt.compare(
-          user.hashedPassword,
-          credentials.password
+          credentials.password,
+          user.hashedPassword
         );
+
+        console.log(isCorrect);
 
         if (!isCorrect) {
           throw new Error("invalid password!");
