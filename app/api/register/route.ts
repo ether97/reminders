@@ -12,7 +12,9 @@ export async function POST(request: Request) {
 
   console.log("register:, ", password);
 
-  const hashedPassword = await bcrypt.hash(password, 12);
+  const salt = await bcrypt.genSalt(10);
+
+  const hashedPassword = await bcrypt.hash(password, salt);
 
   const user = await prisma.user.create({
     data: {
@@ -23,16 +25,16 @@ export async function POST(request: Request) {
     },
   });
 
-  const reminder = await prisma.reminder.create({
-    data: {
-      userId: user.id,
-      title: "handle Atmaja",
-      description: "shes throwing a tantrum",
-      recurring: true,
-      priority: Priority.HIGH,
-      recurringFreq: 1,
-    },
-  });
+  // const reminder = await prisma.reminder.create({
+  //   data: {
+  //     userId: user.id,
+  //     title: "handle Atmaja",
+  //     description: "shes throwing a tantrum",
+  //     recurring: true,
+  //     priority: Priority.HIGH,
+  //     recurringFreq: 1,
+  //   },
+  // });
 
   return NextResponse.json(user);
 }
