@@ -29,9 +29,10 @@ model Reminder {
   userId            String @db.ObjectId
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-  recurring         Boolean @default(false)
-  recurringFreq     Int?
-  priority          Priority @default(MEDIUM)
+
+  recurringDigit    String?
+  recurringString   String?
+  priority          String
   title             String
   description       String?
   location          String?
@@ -40,11 +41,7 @@ model Reminder {
 
 }
 
-enum Priority {
-  LOW
-  MEDIUM
-  HIGH
-}
+
 
 model Account {
   id                String @id @default(auto()) @map("_id") @db.ObjectId
