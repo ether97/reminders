@@ -7,6 +7,9 @@ import { SubmitHandler, useForm, UseFormRegister } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import ErrorMessage from "./ErrorMessage";
+import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
@@ -24,6 +27,7 @@ const formSchema = z.object({
 });
 
 const LoginForm = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -32,11 +36,19 @@ const LoginForm = () => {
   } = useForm<FormSchemaType>({ resolver: zodResolver(formSchema) });
 
   const onSubmit: SubmitHandler<FormSchemaType> = (data) => {
-    if (errors.email) {
-      reset({ email: "" });
-    }
-    reset({ email: "", password: "" });
-    console.log(data);
+    signIn("credentials", {
+      ...data,
+      redirect: false,
+    }).then((callback) => {
+      if (callback?.ok) {
+        toast.success("Logged in!");
+        router.refresh();
+      }
+
+      if (callback?.error) {
+        toast.error(callback.error);
+      }
+    });
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -46,9 +58,7 @@ const LoginForm = () => {
         {...register("email")}
         placeholder="Email"
       />
-      {errors.email && (
-        <ErrorMessage message={errors.email?.message} type="email" />
-      )}
+      {errors.email && <ErrorMessage message={errors.email?.message} />}
 
       <Input
         type="password"
@@ -56,9 +66,7 @@ const LoginForm = () => {
         {...register("password")}
         placeholder="Password"
       />
-      {errors.password && (
-        <ErrorMessage message={errors.password?.message} type="password" />
-      )}
+      {errors.password && <ErrorMessage message={errors.password?.message} />}
       <Button
         type="submit"
         disabled={isSubmitting}
