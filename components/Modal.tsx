@@ -9,22 +9,31 @@ import {
   DialogTrigger,
 } from "../components/ui/dialog";
 import CreateReminder from "./CreateReminder";
+import EditReminder from "./EditReminder";
 
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import Subcategory from "./Subcategory";
 import { Button } from "./ui/button";
+import { Reminder } from "@prisma/client";
 
 import { IconType } from "react-icons";
 
-const Modal: React.FC<{ label: string; icon: IconType }> = ({
-  label,
-  icon,
-}) => {
+const labels = ["Login", "Register", "Create Reminder"];
+
+const Modal: React.FC<{
+  label: string | undefined;
+  icon?: IconType | null;
+  data?: Partial<Reminder & {recurring: boolean}>
+}> = ({ label, icon, data }) => {
   return (
     <Dialog>
       <DialogTrigger className="w-full">
-        <Subcategory label={label} icon={icon} />
+        {label && labels?.includes(label) ? (
+          <Subcategory label={label} icon={icon} />
+        ) : (
+          <Button className="bg-lightbackground w-full">Edit</Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -38,7 +47,7 @@ const Modal: React.FC<{ label: string; icon: IconType }> = ({
         ) : label === "Create Reminder" ? (
           <CreateReminder />
         ) : (
-          ""
+          <EditReminder currentData={data} />
         )}
       </DialogContent>
     </Dialog>

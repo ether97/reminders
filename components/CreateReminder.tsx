@@ -48,7 +48,7 @@ const CreateReminder = () => {
       .post("/api/reminders", { ...data })
       .then(() => {
         toast.success("Reminder added!");
-        router.push("/");
+        router.refresh();
       })
       .catch((err) => {
         toast.error(`${err.message}`);
