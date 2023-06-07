@@ -34,7 +34,7 @@ const Sidebar: React.FC<
           <div>
             <Modal label="Create Reminder" icon={MdOutlineNewLabel} />
           </div>
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col w-full h-fit">
             <Subcategory
               label="My Reminders"
               icon={RiFilePaper2Line}
@@ -45,6 +45,7 @@ const Sidebar: React.FC<
                 key={reminder.title}
                 label={reminder.title}
                 priority={reminder.priority}
+                id={reminder.id}
               />
             ))}
           </div>

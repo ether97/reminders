@@ -41,7 +41,7 @@ export const authOptions: AuthOptions = {
         console.log(user);
 
         if (!user || !user?.hashedPassword) {
-          throw new Error("user doesnt exist or no hashed password");
+          throw new Error("User does not exist");
         }
 
         console.log(user.hashedPassword, credentials.password);

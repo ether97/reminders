@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
-    return null;
+    throw new Error("Must be logged in to add reminders!");
   }
 
   console.log(currentUser);
@@ -27,5 +27,5 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json(currentUser);
+  return NextResponse.json(reminder);
 }
