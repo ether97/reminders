@@ -18,21 +18,24 @@ import { Button } from "./ui/button";
 import { Reminder } from "@prisma/client";
 
 import { IconType } from "react-icons";
+import { BsPenFill } from "react-icons/bs";
 
 const labels = ["Login", "Register", "Create Reminder"];
 
 const Modal: React.FC<{
   label: string | undefined;
   icon?: IconType | null;
-  data?: Partial<Reminder & {recurring: boolean}>
+  data?: Partial<Reminder & { recurring: boolean }>;
 }> = ({ label, icon, data }) => {
   return (
     <Dialog>
-      <DialogTrigger className="w-full">
+      <DialogTrigger
+        className={`${label && labels.includes(label) ? "w-full" : ""}`}
+      >
         {label && labels?.includes(label) ? (
           <Subcategory label={label} icon={icon} />
         ) : (
-          <Button className="bg-lightbackground w-full">Edit</Button>
+          <BsPenFill size={24} className="text-white" />
         )}
       </DialogTrigger>
       <DialogContent>

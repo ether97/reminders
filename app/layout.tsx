@@ -5,6 +5,7 @@ import ToasterProvider from "./lib/Toast";
 import getCurrentUser from "./actions/getCurrentUser";
 import Providers from "./providers/Providers";
 import getReminders from "./actions/getReminders";
+import ReduxProvider from "./providers/ContextProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,11 +26,13 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ToasterProvider />
-        <Providers>
-          <Sidebar currentUser={currentUser} reminders={reminders}>
-            {children}
-          </Sidebar>
-        </Providers>
+        <ReduxProvider>
+          <Providers>
+            <Sidebar currentUser={currentUser} reminders={reminders}>
+              {children}
+            </Sidebar>
+          </Providers>
+        </ReduxProvider>
       </body>
     </html>
   );

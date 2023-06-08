@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 import prisma from "../lib/prismadb";
+import { useDispatch } from "react-redux";
 
 export async function getSession() {
   return await getServerSession(authOptions);

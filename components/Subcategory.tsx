@@ -14,6 +14,7 @@ interface SubcategoryProps {
   label: string | undefined;
   inverted?: boolean;
   onClick?: () => void;
+  className?: string;
 }
 
 const Subcategory: React.FC<SubcategoryProps> = ({
@@ -21,13 +22,15 @@ const Subcategory: React.FC<SubcategoryProps> = ({
   label,
   inverted,
   onClick,
+  className,
 }) => {
-  const array1 = [1, [2, [3, [4, [5]]]]];
-  console.log(array1.flat(Infinity));
   if (inverted) {
     return (
       <div
-        className={`flex flex-row gap-3 items-center w-full px-5 rounded-md text-md py-2 my-2 group bg-lightbackground`}
+        className={twMerge(
+          `flex flex-row gap-3 items-center w-full px-5 rounded-md text-md py-2 my-2 group bg-lightbackground`,
+          className
+        )}
       >
         {Icon && <Icon size={30} className={`text-darkbackground   `} />}
         <p className={`w-full text-md text-center text-white`}>{label}</p>
@@ -37,9 +40,12 @@ const Subcategory: React.FC<SubcategoryProps> = ({
   return (
     <div
       onClick={onClick}
-      className={` ${
-        label === "Create Reminder" ? "animate-enlarge" : "duration-500"
-      } flex flex-row gap-3 items-center w-full px-5 rounded-md text-md hover:bg-lightbackground hover:text-zinc-400 transition cursor-pointer py-2 mt-2 mb-1 group`}
+      className={twMerge(
+        ` ${
+          label === "Create Reminder" ? "animate-enlarge" : "duration-500"
+        } flex flex-row gap-3 items-center w-full px-5 rounded-md text-md hover:bg-lightbackground hover:text-zinc-400 transition cursor-pointer py-2 mt-2 mb-1 group`,
+        className
+      )}
     >
       {Icon && <Icon size={30} className={`  `} />}
       <p

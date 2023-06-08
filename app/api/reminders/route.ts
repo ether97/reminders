@@ -29,3 +29,19 @@ export async function POST(request: Request) {
 
   return NextResponse.json(reminder);
 }
+
+export async function DELETE(request: Request) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    throw new Error("no user!");
+  }
+
+  const deletedReminders = await prisma.reminder.deleteMany({
+    where: {
+      userId: currentUser.id,
+    },
+  });
+
+  return NextResponse.json(currentUser.name);
+}

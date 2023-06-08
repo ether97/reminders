@@ -38,8 +38,8 @@ const CreateReminder: React.FC<{
   const form = useForm<ReminderFormSchemaType>({
     resolver: zodResolver(reminderFormSchema),
     defaultValues: {
-      title: currentData?.title || "",
-      description: currentData?.description || "",
+      title: currentData?.title?.substring(0, 20) || "",
+      description: currentData?.description?.substring(0, 150) || "",
       recurringDigit: currentData?.recurringDigit || "",
       recurringString: currentData?.recurringString || "",
       priority: currentData?.priority || "High",

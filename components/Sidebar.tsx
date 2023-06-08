@@ -5,6 +5,7 @@ import { IChildren } from "../app/types/types";
 import { MdOutlineNewLabel } from "react-icons/md";
 import { RiFilePaper2Line } from "react-icons/ri";
 import { FaUserCheck, FaUserPlus } from "react-icons/fa";
+import { SiClockify } from "react-icons/si";
 import { MdLogout } from "react-icons/md";
 
 import ReminderComponent from "./Reminder";
@@ -13,14 +14,39 @@ import Subcategory from "./Subcategory";
 import { useState } from "react";
 import Modal from "./Modal";
 import { signOut } from "next-auth/react";
+import { useDispatch, useSelector } from "react-redux";
+import { setReminders } from "@/app/redux/features/reminderSlice";
+import { RootState } from "@/app/redux/store";
+
+type obj = {
+  Instance: string;
+  performance: string;
+  agc: string;
+  snr: string;
+  sos: string;
+  flowvel: string;
+};
 
 const Sidebar: React.FC<
   IChildren & { currentUser: User | null; reminders: Reminder[] | null }
 > = ({ children, currentUser, reminders }) => {
+  const dispatch = useDispatch();
+  const stateReminders = useSelector(
+    (state: RootState) => state.reminder.reminders
+  );
+  if (reminders) {
+    dispatch(setReminders(reminders));
+  }
   return (
     <div className="flex flex-row h-full divide-x divide-cyan-800">
       <div className="w-[250px] hidden md:flex flex-col p-2">
         <div className="flex flex-col gap-y-1 w-full divide-y divide-cyan-800">
+          <Subcategory
+            label="Priority Planner"
+            icon={SiClockify}
+            className="bg-lightbackground my-[43px] text-[20px]"
+            inverted
+          />
           <div>
             {currentUser ? (
               <Subcategory label="Logout" icon={MdLogout} onClick={signOut} />
@@ -40,7 +66,7 @@ const Sidebar: React.FC<
               icon={RiFilePaper2Line}
               inverted
             />
-            {reminders?.map((reminder) => (
+            {stateReminders?.map((reminder) => (
               <ReminderComponent
                 key={reminder.title}
                 label={reminder.title}
