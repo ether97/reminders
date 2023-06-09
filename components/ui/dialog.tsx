@@ -58,7 +58,6 @@ const DialogContent = React.forwardRef<
         <X className="h-4 w-4" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
-
     </DialogPrimitive.Content>
   </DialogPortal>
 ));
@@ -82,13 +81,13 @@ const DialogFooter = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn(
-      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-      className
-    )}
-    {...props}
-  />
+    <div
+      className={cn(
+        "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+        className
+      )}
+      {...props}
+    />
 );
 DialogFooter.displayName = "DialogFooter";
 
@@ -119,6 +118,17 @@ const DialogDescription = React.forwardRef<
 ));
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
+const DialogClose = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Close>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Close
+    ref={ref}
+    {...props}
+  />
+))
+DialogClose.displayName = DialogPrimitive.Title.displayName
+
 export {
   Dialog,
   DialogTrigger,
@@ -127,4 +137,5 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
+  DialogClose
 };

@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -55,7 +56,7 @@ const Modal: React.FC<{
           <BsPenFill size={24} className="text-white" />
         )}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="relative">
         <DialogHeader>
           <DialogTitle className="text-center py-2">{label}</DialogTitle>
           <DialogDescription></DialogDescription>
@@ -82,6 +83,7 @@ const Modal: React.FC<{
         ) : (
           <EditReminder currentData={data} />
         )}
+        <DialogFooter></DialogFooter>
       </DialogContent>
     </Dialog>
   );
