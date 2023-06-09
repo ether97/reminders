@@ -13,6 +13,7 @@ module.exports = {
         background: "#082f49",
         lightbackground: "#075985",
         darkbackground: "#172554",
+        lightestbackground: "#a5f3fc",
       },
       keyframes: {
         "accordion-down": {
