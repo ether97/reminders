@@ -13,6 +13,9 @@ import ReminderComponent from "./Reminder";
 import Subcategory from "./Subcategory";
 import Modal from "./Modal";
 import { signOut } from "next-auth/react";
+import LoginForm from "./LoginForm";
+import { Skeleton } from "./ui/skeleton";
+import { Suspense } from "react";
 
 const Sidebar: React.FC<
   IChildren & { currentUser: User | null; reminders: Reminder[] | null }
@@ -31,7 +34,7 @@ const Sidebar: React.FC<
             {currentUser ? (
               <Subcategory label="Logout" icon={MdLogout} onClick={signOut} />
             ) : (
-              <Modal label="Login" icon={FaUserCheck} />
+              <LoginForm />
             )}
 
             <Modal
@@ -48,21 +51,25 @@ const Sidebar: React.FC<
               currentUser={currentUser}
             />
           </div>
-          <div className="flex flex-col w-full h-fit">
-            <Subcategory
-              label="My Reminders"
-              icon={RiFilePaper2Line}
-              inverted
-            />
-            {reminders?.map((reminder) => (
-              <ReminderComponent
-                key={reminder.title}
-                label={reminder.title!}
-                priority={reminder.priority!}
-                id={reminder.id!}
+          <Suspense
+            fallback={<Skeleton className="flex flex-col w-full h-[200px]" />}
+          >
+            <div className="flex flex-col w-full h-fit">
+              <Subcategory
+                label="My Reminders"
+                icon={RiFilePaper2Line}
+                inverted
               />
-            ))}
-          </div>
+              {reminders?.map((reminder) => (
+                <ReminderComponent
+                  key={reminder.title}
+                  label={reminder.title!}
+                  priority={reminder.priority!}
+                  id={reminder.id!}
+                />
+              ))}
+            </div>
+          </Suspense>
         </div>
       </div>
       <main className="h-full flex-1 bg-background ">{children}</main>
