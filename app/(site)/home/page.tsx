@@ -2,6 +2,8 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 import getReminders from "@/app/actions/getReminders";
 import { DataTable } from "@/components/Table/DataTable";
 import { columns } from "../../../components/Table/ReminderColumns";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function Home() {
   const currentUser = await getCurrentUser();
@@ -36,14 +38,17 @@ export default async function Home() {
   }
   return (
     <div className="h-full w-full p-5">
-      <div className="text-[50px]">
-        Welcome back, <span className="font-semibold">{currentUser.name}</span>
-      </div>
+      <Suspense fallback={<Skeleton className="w-full h-[200px]" />}>
+        <div className="text-[50px]">
+          Welcome back,{" "}
+          <span className="font-semibold">{currentUser.name}</span>
+        </div>
 
-      <div className="text-[25px] text-zinc-400 font-extralight">
-        Here are your reminders...
-      </div>
-      <DataTable columns={columns} data={reminders} />
+        <div className="text-[25px] text-zinc-400 font-extralight">
+          Here are your reminders...
+        </div>
+        <DataTable columns={columns} data={reminders} />
+      </Suspense>
     </div>
   );
 }
