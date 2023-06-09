@@ -10,6 +10,20 @@ import ErrorMessage from "./ErrorMessage";
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { HTMLAttributes } from "react";
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import Subcategory from "./Subcategory";
+
+import { FaUserCheck } from "react-icons/fa";
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
@@ -51,30 +65,49 @@ const LoginForm = () => {
     });
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <Input
-        type="text"
-        id="email"
-        {...register("email")}
-        placeholder="Email"
-      />
-      {errors.email && <ErrorMessage message={errors.email?.message} />}
+    <Dialog>
+      <DialogTrigger className="w-full">
+        <Subcategory
+          label="Login"
+          icon={FaUserCheck}
+          // className={`${disabled && "bg-gray-700 cursor-not-allowed"}`}
+          // inverted={disabled ? true : false}
+        />
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="mb-2 text-center">Login</DialogTitle>
+          <DialogDescription>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col gap-4"
+            >
+              <Input
+                type="text"
+                id="email"
+                {...register("email")}
+                placeholder="Email"
+              />
+              {errors.email && <ErrorMessage message={errors.email?.message} />}
 
-      <Input
-        type="password"
-        id="password"
-        {...register("password")}
-        placeholder="Password"
-      />
-      {errors.password && <ErrorMessage message={errors.password?.message} />}
-      <Button
-        type="submit"
-        disabled={isSubmitting}
-        className="bg-lightbackground"
-      >
-        Login
-      </Button>
-    </form>
+              <Input
+                type="password"
+                id="password"
+                {...register("password")}
+                placeholder="Password"
+              />
+              {errors.password && (
+                <ErrorMessage message={errors.password?.message} />
+              )}
+              <Button type="submit" className="bg-lightbackground w-full">
+                <DialogClose />
+                Login
+              </Button>
+            </form>
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   );
 };
 
