@@ -26,6 +26,18 @@ import { Label } from "../ui/label";
 import { toast } from "react-hot-toast";
 import DropdownActions from "./DropdownActions";
 
+const formatTime = (time: string): string => {
+  let firstTwo = Number(time.slice(0, 2));
+  if (firstTwo <= 12) {
+    let removedFirst = time.slice(1, time.length);
+    return `${removedFirst} AM`;
+  } else {
+    firstTwo -= 12;
+    return `${time} PM`;
+  }
+  return "";
+};
+
 export const columns: ColumnDef<Partial<Reminder & { recurring: boolean }>>[] =
   [
     {
@@ -73,7 +85,7 @@ export const columns: ColumnDef<Partial<Reminder & { recurring: boolean }>>[] =
       id: "Deadline",
       accessorFn: (row) =>
         `${row.date ? row.date.toLocaleDateString() : ""} ${
-          row.time ? row.time : ""
+          row.time ? formatTime(row.time) : ""
         }`,
     },
     // {
