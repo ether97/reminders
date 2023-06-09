@@ -29,11 +29,12 @@ model Reminder {
   userId            String @db.ObjectId
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-
+  date              DateTime?
+  time              String?
   recurringDigit    String?
   recurringString   String?
   priority          String
-  title             String
+  title             String @unique
   description       String?
   location          String?
 
