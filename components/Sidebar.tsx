@@ -11,32 +11,12 @@ import { MdLogout } from "react-icons/md";
 import ReminderComponent from "./Reminder";
 
 import Subcategory from "./Subcategory";
-import { useState } from "react";
 import Modal from "./Modal";
 import { signOut } from "next-auth/react";
-import { useDispatch, useSelector } from "react-redux";
-import { setReminders } from "@/app/redux/features/reminderSlice";
-import { RootState } from "@/app/redux/store";
-
-type obj = {
-  Instance: string;
-  performance: string;
-  agc: string;
-  snr: string;
-  sos: string;
-  flowvel: string;
-};
 
 const Sidebar: React.FC<
   IChildren & { currentUser: User | null; reminders: Reminder[] | null }
 > = ({ children, currentUser, reminders }) => {
-  const dispatch = useDispatch();
-  const stateReminders = useSelector(
-    (state: RootState) => state.reminder.reminders
-  );
-  if (reminders) {
-    dispatch(setReminders(reminders));
-  }
   return (
     <div className="flex flex-row h-full divide-x divide-cyan-800">
       <div className="w-[250px] hidden md:flex flex-col p-2">
@@ -44,7 +24,7 @@ const Sidebar: React.FC<
           <Subcategory
             label="Priority Planner"
             icon={SiClockify}
-            className="bg-lightbackground my-[43px] text-[20px]"
+            className="bg-lightbackground py-[43px] text-[20px]"
             inverted
           />
           <div>
@@ -54,11 +34,19 @@ const Sidebar: React.FC<
               <Modal label="Login" icon={FaUserCheck} />
             )}
 
-            <Modal label="Register" icon={FaUserPlus} />
+            <Modal
+              label="Register"
+              icon={FaUserPlus}
+              disabled={currentUser ? true : false}
+            />
           </div>
 
           <div>
-            <Modal label="Create Reminder" icon={MdOutlineNewLabel} />
+            <Modal
+              label="Create Reminder"
+              icon={MdOutlineNewLabel}
+              currentUser={currentUser}
+            />
           </div>
           <div className="flex flex-col w-full h-fit">
             <Subcategory
@@ -66,12 +54,12 @@ const Sidebar: React.FC<
               icon={RiFilePaper2Line}
               inverted
             />
-            {stateReminders?.map((reminder) => (
+            {reminders?.map((reminder) => (
               <ReminderComponent
                 key={reminder.title}
-                label={reminder.title}
-                priority={reminder.priority}
-                id={reminder.id}
+                label={reminder.title!}
+                priority={reminder.priority!}
+                id={reminder.id!}
               />
             ))}
           </div>

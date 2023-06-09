@@ -6,8 +6,6 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { deleteReminder } from "@/app/redux/features/reminderSlice";
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -16,16 +14,16 @@ const ReminderComponent: React.FC<{
   priority: string;
   id: string;
 }> = ({ label, priority, id: reminderId }) => {
-  const dispatch = useDispatch();
   const router = useRouter();
   const [effect, setEffect] = useState(false);
 
   const handleClick = async () => {
-    dispatch(deleteReminder(reminderId));
-    setEffect(true);
     axios
       .delete(`/api/reminders/${reminderId}`)
-      .then(() => {})
+      .then(() => {
+        setEffect(true);
+        router.refresh();
+      })
       .catch(() => {
         toast.error("couldnt remove reminder");
       });
