@@ -70,12 +70,11 @@ export const columns: ColumnDef<Partial<Reminder & { recurring: boolean }>>[] =
       header: "Description",
     },
     {
-      accessorKey: "recurring",
-      header: "Recurring",
-    },
-    {
-      id: "Every",
-      accessorFn: (row) => `${row.recurringDigit} ${row.recurringString}`,
+      id: "Deadline",
+      accessorFn: (row) =>
+        `${row.date ? row.date.toLocaleDateString() : ""} ${
+          row.time ? row.time : ""
+        }`,
     },
     // {
     //   accessorKey: "priority",
