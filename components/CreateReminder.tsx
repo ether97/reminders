@@ -4,7 +4,6 @@ import * as z from "zod";
 import { SubmitHandler, useForm, UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
-import ErrorMessage from "./ErrorMessage";
 import { Button } from "./ui/button";
 
 import { Textarea } from "./ui/textarea";
@@ -15,12 +14,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import toast from "react-hot-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { Label } from "./ui/label";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+import { Calendar } from "./ui/calendar";
+import { useState } from "react";
+import TimePicker from "react-time-picker";
 
-type ReminderFormSchemaType = z.infer<typeof reminderFormSchema>;
+export type ReminderFormSchemaType = z.infer<typeof reminderFormSchema>;
 
 export const reminderFormSchema = z.object({
   title: z.string().min(1, { message: "Title required!" }),
@@ -28,9 +31,12 @@ export const reminderFormSchema = z.object({
   recurringDigit: z.string().nullable(),
   recurringString: z.string().nullable(),
   priority: z.string(),
+  date: z.date(),
+  time: z.string(),
 });
 
 const CreateReminder = () => {
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const router = useRouter();
   const form = useForm<ReminderFormSchemaType>({
     resolver: zodResolver(reminderFormSchema),
@@ -40,19 +46,26 @@ const CreateReminder = () => {
       recurringDigit: "",
       recurringString: "",
       priority: "High",
+      date: new Date(),
+      time: "",
     },
   });
 
   async function onSubmit(data: ReminderFormSchemaType) {
-    axios
-      .post("/api/reminders", { ...data })
-      .then(() => {
-        toast.success("Reminder added!");
-        router.refresh();
-      })
-      .catch((err) => {
-        toast.error(`${err.message}`);
-      });
+    console.log(data);
+    try {
+      axios
+        .post<ReminderFormSchemaType>("/api/reminders", { ...data })
+        .then((response) => {
+          toast.success("Reminder added!");
+          router.refresh();
+        });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data);
+      }
+    }
+
     console.log(data);
   }
 
@@ -130,6 +143,16 @@ const CreateReminder = () => {
             </option>
           ))}
         </select>
+      </div>
+      <div className="flex flex-col gap-1 items-center w-fit mx-auto">
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          {...form.register("date")}
+          className="rounded-md border"
+        />
+        <Input type="time" id="time" {...form.register("time")} />
       </div>
       <Button type="submit" className="bg-lightbackground my-2">
         Create
