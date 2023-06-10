@@ -38,7 +38,6 @@ export default async function Home() {
   }
   return (
     <div className="h-full w-full p-5">
-      <Suspense fallback={<Skeleton className="w-full h-[200px]" />}>
         <div className="text-[50px]">
           Welcome back,{" "}
           <span className="font-semibold">{currentUser.name}</span>
@@ -48,7 +47,6 @@ export default async function Home() {
           Here are your reminders...
         </div>
         <DataTable columns={columns} data={reminders} />
-      </Suspense>
     </div>
   );
 }

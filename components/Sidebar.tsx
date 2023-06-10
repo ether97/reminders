@@ -15,11 +15,17 @@ import Modal from "./Modal";
 import { signOut } from "next-auth/react";
 import LoginForm from "./LoginForm";
 import { Skeleton } from "./ui/skeleton";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
+import ReminderList from "./ReminderList";
 
 const Sidebar: React.FC<
   IChildren & { currentUser: User | null; reminders: Reminder[] | null }
 > = ({ children, currentUser, reminders }) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   return (
     <div className="flex flex-row h-full divide-x divide-cyan-800">
       <div className="w-[250px] hidden md:flex flex-col p-2">
@@ -34,14 +40,10 @@ const Sidebar: React.FC<
             {currentUser ? (
               <Subcategory label="Logout" icon={MdLogout} onClick={signOut} />
             ) : (
-              <LoginForm />
+              <LoginForm disabled={!mounted} />
             )}
 
-            <Modal
-              label="Register"
-              icon={FaUserPlus}
-              disabled={currentUser ? true : false}
-            />
+            <Modal label="Register" icon={FaUserPlus} disabled={!mounted} />
           </div>
 
           <div>
@@ -49,27 +51,11 @@ const Sidebar: React.FC<
               label="Create Reminder"
               icon={MdOutlineNewLabel}
               currentUser={currentUser}
+              disabled={!mounted}
             />
           </div>
-          <Suspense
-            fallback={<Skeleton className="flex flex-col w-full h-[200px]" />}
-          >
-            <div className="flex flex-col w-full h-fit">
-              <Subcategory
-                label="My Reminders"
-                icon={RiFilePaper2Line}
-                inverted
-              />
-              {reminders?.map((reminder) => (
-                <ReminderComponent
-                  key={reminder.title}
-                  label={reminder.title!}
-                  priority={reminder.priority!}
-                  id={reminder.id!}
-                />
-              ))}
-            </div>
-          </Suspense>
+
+          <ReminderList reminders={reminders} />
         </div>
       </div>
       <main className="h-full flex-1 bg-background ">{children}</main>
