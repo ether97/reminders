@@ -27,7 +27,7 @@ const Sidebar: React.FC<
     setMounted(true);
   }, []);
   return (
-    <div className="flex flex-row h-full divide-x divide-cyan-800">
+    <div className="flex flex-row h-full divide-x divide-cyan-800 overflow-y-scroll">
       <div className="w-[250px] hidden md:flex flex-col p-2">
         <div className="flex flex-col gap-y-1 w-full divide-y divide-cyan-800">
           <Subcategory

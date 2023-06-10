@@ -5,6 +5,7 @@ import { SubmitHandler, useForm, UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { Reminder } from "@prisma/client";
 
 import { Textarea } from "./ui/textarea";
 
@@ -22,6 +23,7 @@ import { toast } from "react-hot-toast";
 import { Calendar } from "./ui/calendar";
 import { useState } from "react";
 import TimePicker from "react-time-picker";
+import { addReminder } from "@/app/actions/addReminder";
 
 export type ReminderFormSchemaType = z.infer<typeof reminderFormSchema>;
 
@@ -52,20 +54,11 @@ const CreateReminder = () => {
   });
 
   async function onSubmit(data: ReminderFormSchemaType) {
-    console.log(data);
-    try {
-      axios
-        .post<ReminderFormSchemaType>("/api/reminders", { ...data })
-        .then((response) => {
-          toast.success("Reminder added!");
-          router.refresh();
-        });
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        toast.error(error?.response?.data);
-      }
+    let reminder: Reminder | null;
+    reminder = await addReminder({ ...data });
+    if (reminder) {
+      toast.success("Reminder added!");
     }
-
     console.log(data);
   }
 
@@ -145,13 +138,13 @@ const CreateReminder = () => {
         </select>
       </div>
       <div className="flex flex-col gap-1 items-center w-fit mx-auto">
-        <Calendar
+        {/* <Calendar
           mode="single"
           selected={date}
           onSelect={setDate}
           {...form.register("date")}
           className="rounded-md border"
-        />
+        /> */}
         <Input type="time" id="time" {...form.register("time")} />
       </div>
       <Button type="submit" className="bg-lightbackground my-2">
