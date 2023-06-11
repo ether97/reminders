@@ -1,24 +1,24 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { Reminder, User } from "@prisma/client";
+import { Reminder } from "@prisma/client";
 
-const BASE_URL = "http://localhost:3000/api";
+const BASE_URL = "http://localhost:3000/api/reminders";
 
 export const reminderApi = createApi({
   reducerPath: "reminderApi",
-  tagTypes: ["Reminders", "Users"],
+  tagTypes: ["Reminders"],
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   endpoints: (builder) => ({
     getReminders: builder.query<Partial<Reminder>[] | [], void>({
       query: () => ({
-        url: "/reminders",
+        url: "/",
         method: "GET",
       }),
       providesTags: ["Reminders"],
     }),
     addReminder: builder.mutation<Reminder, Partial<Reminder>>({
       query: ({ ...reminder }) => ({
-        url: "/reminders",
+        url: "/",
         method: "POST",
         body: reminder,
       }),
@@ -44,7 +44,7 @@ export const reminderApi = createApi({
     }),
     deleteReminder: builder.mutation<Reminder, string>({
       query: (reminderId) => ({
-        url: `/reminders/${reminderId}`,
+        url: `/${reminderId}`,
         method: "DELETE",
       }),
       async onQueryStarted(reminderId, { dispatch, queryFulfilled }) {
@@ -65,6 +65,38 @@ export const reminderApi = createApi({
       },
       invalidatesTags: ["Reminders"],
     }),
+    updateReminder: builder.mutation<
+      Reminder,
+      Pick<Reminder, "id"> & Partial<Reminder>
+    >({
+      query: ({ id: reminderId, ...reminder }) => ({
+        url: `/${reminderId}`,
+        method: "PATCH",
+        body: reminder,
+      }),
+      async onQueryStarted({ id, ...reminder }, { dispatch, queryFulfilled }) {
+        const updateResult = dispatch(
+          reminderApi.util.updateQueryData(
+            "getReminders",
+            undefined,
+            (draft: Partial<Reminder>[]) => {
+              draft = draft.map((oldReminder) => {
+                if (oldReminder.id === id) {
+                  return reminder;
+                } else {
+                  return oldReminder;
+                }
+              });
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          updateResult.undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -72,4 +104,5 @@ export const {
   useGetRemindersQuery,
   useAddReminderMutation,
   useDeleteReminderMutation,
+  useUpdateReminderMutation
 } = reminderApi;

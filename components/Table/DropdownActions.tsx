@@ -13,18 +13,34 @@ import { Reminder } from "@prisma/client";
 import { Row } from "@tanstack/react-table";
 
 import { BiDotsHorizontalRounded } from "react-icons/bi";
+import Modal from "../Modal";
+import { FaTrashAlt } from "react-icons/fa";
+import { useDeleteReminderMutation } from "@/app/services/reminder";
+import EditReminder from "../EditReminder";
 
 const DropdownActions: React.FC<{
-  data: Partial<Reminder & { recurring: boolean }>;
+  data: Partial<Reminder>;
 }> = ({ data }) => {
+  const [deleteReminder] = useDeleteReminderMutation();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <BiDotsHorizontalRounded size={24} />
+        <BiDotsHorizontalRounded size={20} />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-lightbackground">
-        <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Delete</DropdownMenuItem>
+        <DropdownMenuItem className="hover:bg-background transition duration-100 cursor-pointer">
+          <EditReminder currentData={data} />
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="hover:bg-background transition duration-100 cursor-pointer"
+          onClick={() => {
+            if (data.id) {
+              deleteReminder(data.id);
+            }
+          }}
+        >
+          <FaTrashAlt size={20} className="text-rose-800" />
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

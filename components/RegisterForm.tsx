@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { SubmitHandler, useForm, UseFormRegister } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import ErrorMessage from "./ErrorMessage";
@@ -11,34 +9,15 @@ import ErrorMessage from "./ErrorMessage";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-type FormSchemaType = z.infer<typeof formSchema>;
-
-const formSchema = z.object({
-  name: z.string().min(1, { message: "Name required!" }),
-  email: z.string().email().min(1, { message: "Email required!" }),
-  password: z
-    .string()
-    .min(1, { message: "Password is required!" })
-    .regex(new RegExp(".*[A-Z].*"), "One uppercase character")
-    .regex(new RegExp(".*[a-z].*"), "One lowercase character")
-    .regex(new RegExp(".*\\d.*"), "One number")
-    .regex(
-      new RegExp(".*[`~<>?,./!@#$%^&*()\\-_+=\"'|{}\\[\\];:\\\\].*"),
-      "One special character"
-    ),
-  confirmPassword: z
-    .string()
-    .min(1, { message: "This field cannot be empty!" }),
-});
-//   .refine((data) => data.password !== data.confirmPassword, {
-//     message: "Passwords must match!",
-//     path: ["confirm"],
-//   });
+import { RegisterFormSchemaType } from "@/app/schemas/schemas";
+import { registerFormSchema } from "@/app/schemas/schemas";
 
 const RegisterForm = () => {
-  const form = useForm<FormSchemaType>({ resolver: zodResolver(formSchema) });
+  const form = useForm<RegisterFormSchemaType>({
+    resolver: zodResolver(registerFormSchema),
+  });
 
-  const onSubmit: SubmitHandler<FormSchemaType> = (data) => {
+  const onSubmit: SubmitHandler<RegisterFormSchemaType> = (data) => {
     console.log(data);
 
     axios

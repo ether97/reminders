@@ -35,7 +35,7 @@ const labels = ["Login", "Register", "Create Reminder"];
 const Modal: React.FC<{
   label: string | undefined;
   icon?: IconType | null;
-  data?: Partial<Reminder & { recurring: boolean }>;
+  data: Partial<Reminder>;
   currentUser?: User | null;
   disabled?: boolean;
 }> = ({ label, icon, data, currentUser, disabled }) => {

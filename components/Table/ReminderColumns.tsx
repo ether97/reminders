@@ -25,7 +25,8 @@ import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { toast } from "react-hot-toast";
 import DropdownActions from "./DropdownActions";
-import { useDeleteReminderMutation } from "@/app/services/app";
+import { useDeleteReminderMutation } from "@/app/services/reminder";
+import EditReminder from "../EditReminder";
 
 const formatTime = (time: string): string => {
   let firstTwo = Number(time.slice(0, 2));
@@ -82,7 +83,7 @@ export const columns: ColumnDef<Partial<Reminder>>[] = [
   {
     id: "Deadline",
     accessorFn: (row) =>
-      `${row.date ? row.date.toString() : ""} ${
+      `${row.date ? new Date(row.date).toLocaleDateString() : ""} ${
         row.time ? formatTime(row.time) : ""
       }`,
   },
@@ -95,7 +96,10 @@ export const columns: ColumnDef<Partial<Reminder>>[] = [
     accessorKey: "priority",
     header: ({ column }) => {
       return (
-        <Button variant="outline">
+        <Button
+          variant="ghost"
+          className="hover:bg-lightbackground transition duration-100"
+        >
           Priority
           {column.getIsSorted() === "asc" ? (
             <BiArrowToTop size={24} />
@@ -110,15 +114,24 @@ export const columns: ColumnDef<Partial<Reminder>>[] = [
     sortingFn: "myCustomSorting",
   },
   {
-    id: "Actions",
-    header: "Actions",
+    id: "Delete",
+    header: "Delete",
     cell: ({ row }) => {
       return (
-        <div className="flex flex-row gap-2 items-center justify-center">
-          <Modal label="Edit" data={row.original} />
-          <FaTrashAlt size={24} className="text-rose-800 cursor-pointer" />
+        <div className="flex flex-row items-center justify-center cursor-pointer">
+          <FaTrashAlt
+            size={20}
+            className="text-rose-800 cursor-pointer hover:scale-125 transition duration-300 ease-in-out"
+          />
         </div>
       );
+    },
+  },
+  {
+    id: "Edit",
+    header: "Edit",
+    cell: ({ row }) => {
+      return <EditReminder currentData={row.original} />;
     },
   },
 ];

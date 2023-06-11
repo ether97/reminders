@@ -6,7 +6,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { useDeleteReminderMutation } from "@/app/services/app";
+import { useDeleteReminderMutation } from "@/app/services/reminder";
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -39,11 +39,11 @@ const ReminderComponent: React.FC<{
     `}
       onAnimationEnd={() => setEffect(false)}
     >
-      <p className="text-md text-start truncate w-5/6">{label}</p>
+      <p className="text-md text-white text-start truncate w-5/6">{label}</p>
       <AiOutlineCloseCircle
         onClick={handleClick}
         size={20}
-        className="absolute right-[10px] cursor-pointer top-[6px] hover:scale-125 transition duration-200 hover:rotate-180"
+        className="absolute right-[10px] cursor-pointer top-[6px] text-white hover:scale-125 transition duration-200 hover:rotate-180"
       />
     </div>
   );

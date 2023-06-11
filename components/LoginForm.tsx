@@ -1,17 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { SubmitHandler, useForm, UseFormRegister } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import ErrorMessage from "./ErrorMessage";
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { HTMLAttributes, useState } from "react";
-import { Progress } from "@/components/ui/progress";
+import { useState } from "react";
 
 import {
   Dialog,
@@ -24,12 +22,11 @@ import {
 } from "@/components/ui/dialog";
 import Subcategory from "./Subcategory";
 
-import { formSchema } from "@/app/types/types";
+import { formSchema } from "@/app/schemas/schemas";
 
-import { FormSchemaType } from "@/app/types/types";
+import { FormSchemaType } from "@/app/schemas/schemas";
 
 import { FaUserCheck } from "react-icons/fa";
-import Skeleton from "./Skeleton";
 
 const LoginForm: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -51,6 +48,7 @@ const LoginForm: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
       if (callback?.ok) {
         document.getElementById("closeDialog")?.click();
         router.refresh();
+        reset();
         toast.success("Logged in!");
       }
 
@@ -66,12 +64,11 @@ const LoginForm: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
           label="Login"
           icon={FaUserCheck}
           className={`${disabled && "bg-gray-700 cursor-not-allowed"}`}
-          // inverted={disabled ? true : false}
         />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="mb-2 text-center">
+          <DialogTitle className="mb-2 text-center text-white">
             {!isLoading && "Login"}
           </DialogTitle>
           <DialogDescription>
@@ -104,7 +101,10 @@ const LoginForm: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
                 {errors.password && (
                   <ErrorMessage message={errors.password?.message} />
                 )}
-                <Button type="submit" className="bg-lightbackground w-full">
+                <Button
+                  type="submit"
+                  className="bg-lightbackground w-full text-white"
+                >
                   Login
                 </Button>
               </form>

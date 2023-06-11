@@ -28,7 +28,7 @@ export async function DELETE(
   return NextResponse.json(reminder);
 }
 
-export async function PUT(
+export async function PATCH(
   request: Request,
   { params }: { params: { reminderId: string } }
 ) {

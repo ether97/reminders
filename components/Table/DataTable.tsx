@@ -30,7 +30,7 @@ import { useMemo, useState } from "react";
 import {
   useDeleteReminderMutation,
   useGetRemindersQuery,
-} from "@/app/services/app";
+} from "@/app/services/reminder";
 
 interface DataTableProps {
   columns: ColumnDef<Partial<Reminder>>[];
@@ -81,7 +81,7 @@ export function DataTable({ columns, data }: DataTableProps) {
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id} className="text-center">
+                  <TableHead key={header.id} className="text-center text-white">
                     {header.isPlaceholder ? null : (
                       <div onClick={() => header.column.toggleSorting()}>
                         {flexRender(
@@ -106,9 +106,13 @@ export function DataTable({ columns, data }: DataTableProps) {
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}
-                    className="text-center truncate max-w-[200px]"
+                    className="text-center truncate max-w-[200px] text-white"
                     onClick={() => {
-                      if (row.original.id) {
+                      console.log(cell);
+                      if (
+                        cell.id.substring(2, cell.id.length) === "Delete" &&
+                        row.original.id
+                      ) {
                         deleteReminder(row.original.id);
                       }
                     }}

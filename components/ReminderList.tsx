@@ -4,7 +4,7 @@ import { Reminder, User } from "@prisma/client";
 import Subcategory from "./Subcategory";
 import ReminderComponent from "./Reminder";
 import { RiFilePaper2Line } from "react-icons/ri";
-import { useGetRemindersQuery } from "@/app/services/app";
+import { useGetRemindersQuery } from "@/app/services/reminder";
 
 const ReminderList = () => {
   const { data, isLoading, error } = useGetRemindersQuery();

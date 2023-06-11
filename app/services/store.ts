@@ -1,6 +1,6 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 
-import { reminderApi } from "./app";
+import { reminderApi } from "./reminder";
 
 export const store = configureStore({
   reducer: {
