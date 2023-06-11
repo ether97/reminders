@@ -31,12 +31,9 @@ model Reminder {
   updatedAt         DateTime @updatedAt
   date              DateTime?
   time              String?
-  recurringDigit    String?
-  recurringString   String?
   priority          String
   title             String @unique
   description       String?
-  location          String?
 
   user              User @relation(fields: [userId], references: [id], onDelete: Cascade )
 

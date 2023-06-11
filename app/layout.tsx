@@ -3,9 +3,9 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import ToasterProvider from "./lib/Toast";
 import getCurrentUser from "./actions/getCurrentUser";
-import Providers from "./providers/Providers";
 import getReminders from "./actions/getReminders";
 import ShadToaster from "./lib/ShadToast";
+import RTKProvider from "./providers/RTKProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,11 +28,11 @@ export default async function RootLayout({
       <body className={inter.className}>
         <ToasterProvider />
         <ShadToaster />
-        <Providers>
+        <RTKProvider>
           <Sidebar currentUser={currentUser} reminders={reminders}>
             {children}
           </Sidebar>
-        </Providers>
+        </RTKProvider>
       </body>
     </html>
   );

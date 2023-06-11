@@ -27,16 +27,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useMemo, useState } from "react";
+import {
+  useDeleteReminderMutation,
+  useGetRemindersQuery,
+} from "@/app/services/app";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataTableProps {
+  columns: ColumnDef<Partial<Reminder>>[];
+  data: Partial<Reminder>[];
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+export function DataTable({ columns, data }: DataTableProps) {
+  const [deleteReminder] = useDeleteReminderMutation();
+
   const prioritySort = useMemo(
     () =>
       (rowA: any, rowB: any, columnId: any): number => {
@@ -55,6 +58,7 @@ export function DataTable<TData, TValue>({
   );
 
   const [sorting, setSorting] = useState<SortingState>([]);
+
   const table = useReactTable({
     data,
     columns,
@@ -68,6 +72,7 @@ export function DataTable<TData, TValue>({
       myCustomSorting: prioritySort,
     },
   });
+
   return (
     <div className="rounded-md border my-3">
       <Table>
@@ -102,6 +107,11 @@ export function DataTable<TData, TValue>({
                   <TableCell
                     key={cell.id}
                     className="text-center truncate max-w-[200px]"
+                    onClick={() => {
+                      if (row.original.id) {
+                        deleteReminder(row.original.id);
+                      }
+                    }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>

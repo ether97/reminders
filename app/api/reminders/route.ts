@@ -19,11 +19,15 @@ export async function POST(request: Request) {
 
   const body = await request.json();
 
+  console.log(body);
+
   const user = await prisma.user.findUnique({
     where: {
       email: currentUser.email as string,
     },
   });
+
+  console.log(user);
 
   const exists = await prisma.reminder.findUnique({
     where: {
@@ -40,7 +44,7 @@ export async function POST(request: Request) {
 
   const reminder = await prisma.reminder.create({
     data: {
-      userId: user?.id,
+      userId: currentUser?.id,
       ...body,
     },
   });
@@ -77,7 +81,10 @@ export async function GET(request: Request) {
     },
   });
 
-  console.log(reminders);
+  const newReminders = reminders.map((reminder) => ({
+    ...reminder,
+    date: reminder.date?.toISOString(),
+  }));
 
-  return NextResponse.json(reminders);
+  return NextResponse.json(newReminders);
 }

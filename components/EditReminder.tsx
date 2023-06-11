@@ -26,8 +26,6 @@ type ReminderFormSchemaType = z.infer<typeof reminderFormSchema>;
 export const reminderFormSchema = z.object({
   title: z.string().min(1, { message: "Title required!" }),
   description: z.string().max(160),
-  recurringDigit: z.string().nullable(),
-  recurringString: z.string().nullable(),
   priority: z.string(),
 });
 
@@ -40,8 +38,6 @@ const CreateReminder: React.FC<{
     defaultValues: {
       title: currentData?.title?.substring(0, 20) || "",
       description: currentData?.description?.substring(0, 150) || "",
-      recurringDigit: currentData?.recurringDigit || "",
-      recurringString: currentData?.recurringString || "",
       priority: currentData?.priority || "High",
     },
   });
@@ -82,39 +78,7 @@ const CreateReminder: React.FC<{
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
           <AccordionTrigger>Will this reminder repeat?</AccordionTrigger>
-          <AccordionContent>
-            <div className="flex flex-row items-center justify-between w-full gap-x-3 my-2">
-              <Label>Remind me every: </Label>
-              <select
-                {...form.register("recurringDigit")}
-                className="flex-1 h-10 items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
-                  <option
-                    key={item}
-                    value={0 || item}
-                    className="bg-background h-[10px] cursor-pointer transition hover:bg-white hover:text-black"
-                  >
-                    {item}
-                  </option>
-                ))}
-              </select>
-              <select
-                {...form.register("recurringString")}
-                className="flex-1 h-10 items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {["Minute(s)", "Hour(s)", "Day(s)"].map((item) => (
-                  <option
-                    key={item}
-                    value={"" || item}
-                    className="bg-background h-[10px] cursor-pointer transition hover:bg-white hover:text-black"
-                  >
-                    {item}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </AccordionContent>
+          <AccordionContent></AccordionContent>
         </AccordionItem>
       </Accordion>
 
