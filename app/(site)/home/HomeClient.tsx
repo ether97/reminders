@@ -8,6 +8,14 @@ import { columns } from "../../../components/Table/ReminderColumns";
 const HomeClient = () => {
   const { data, isLoading, error } = useGetRemindersQuery();
 
+  if (isLoading) {
+    return (
+      <div className="text-[25px] text-zinc-400 font-extralight animate-bounce">
+        Loading your reminders...
+      </div>
+    );
+  }
+
   if (data) {
     return (
       <>
