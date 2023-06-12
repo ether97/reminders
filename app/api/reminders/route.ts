@@ -2,32 +2,156 @@ import { NextResponse } from "next/server";
 
 import prisma from "../../lib/prismadb";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import { Reminder } from "@/app/types/types";
 
-import { ReminderFormSchemaType } from "@/components/CreateReminder";
+export async function DELETE(request: Request) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    throw new Error("Not logged in!");
+  }
+
+  const user = await prisma.user.update({
+    where: {
+      id: currentUser.id,
+    },
+    data: {
+      deadlines: [],
+    },
+  });
+
+  return NextResponse.json(user);
+}
+
+export async function PATCH(request: Request) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    throw new Error("Not logged in!");
+  }
+
+  const data: Pick<Reminder, "title" | "date" | "time" | "priority" | "id">[] =
+    await request.json();
+
+  const titles = data.map((reminder) => reminder.title);
+
+  const user = await prisma.user.update({
+    where: {
+      id: currentUser.id,
+    },
+    data: {
+      reminders: {
+        deleteMany: {
+          title: {
+            in: titles,
+          },
+        },
+      },
+    },
+  });
+
+  return NextResponse.json(user);
+}
+
+export async function PUT(request: Request) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    throw new Error("Not logged in!");
+  }
+
+  const data: Pick<Reminder, "title" | "date" | "time" | "priority" | "id">[] =
+    await request.json();
+
+  console.log(data);
+
+  const result = data.reduce((acc, reminder) => {
+    const compareDates = (
+      acc: Pick<Reminder, "title" | "date" | "time" | "priority" | "id">,
+      reminder: Pick<Reminder, "title" | "date" | "time" | "priority" | "id">
+    ) => {
+      if (!acc.date) {
+        return { id: reminder.id, date: reminder.date };
+      }
+      if (!reminder.date) {
+        return { id: acc.id, date: acc.date };
+      }
+      if (acc.date < reminder.date) {
+        return { id: acc.id, date: acc.date };
+      }
+      if (reminder.date < acc.date) {
+        return { id: reminder.id, date: reminder.date };
+      }
+      if (!acc.time) {
+        return {
+          id: reminder.id,
+          date: reminder.date,
+          time: reminder.time,
+        };
+      }
+      if (!reminder.time) {
+        return { id: acc.id, date: acc.date, time: acc.time };
+      }
+      if (new Date(acc.time) < new Date(reminder.time)) {
+        return { id: acc.id, date: acc.date, time: acc.time };
+      }
+      if (new Date(reminder.time) < new Date(acc.time)) {
+        return {
+          id: reminder.id,
+          date: reminder.date,
+          time: reminder.time,
+        };
+      }
+      return {
+        id: reminder.id,
+        date: reminder.date,
+        time: reminder.time,
+      };
+    };
+    const result = compareDates(reminder, acc);
+    return {
+      ...acc,
+      title: `${reminder.title} ${acc.title}`,
+      date: reminder.date || result.date,
+      time: reminder.time || result.time,
+      priority: reminder.priority,
+    };
+  });
+
+  const newObject = await prisma.reminder.create({
+    data: {
+      userId: currentUser.id,
+      title: result.title,
+      date: result.date,
+      time: result.time,
+      priority: result.priority,
+    },
+  });
+
+  const deadlines = [...(currentUser.deadlines || [])];
+
+  deadlines.push(newObject.id);
+
+  const user = await prisma.user.update({
+    where: {
+      id: currentUser.id,
+    },
+    data: {
+      deadlines,
+    },
+  });
+
+  return NextResponse.json(user);
+}
 
 export async function POST(request: Request) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
-    return NextResponse.json(
-      { error: "Must be logged in to add reminders!" },
-      { status: 401 }
-    );
+    return NextResponse.error();
   }
 
-  console.log(currentUser);
-
   const body = await request.json();
-
-  console.log(body);
-
-  const user = await prisma.user.findUnique({
-    where: {
-      email: currentUser.email as string,
-    },
-  });
-
-  console.log(user);
 
   const exists = await prisma.reminder.findUnique({
     where: {
@@ -36,10 +160,7 @@ export async function POST(request: Request) {
   });
 
   if (exists) {
-    return NextResponse.json(
-      { error: "Reminder exists, consider changing title!" },
-      { status: 409 }
-    );
+    throw new Error("deadline already exists!");
   }
 
   const reminder = await prisma.reminder.create({
@@ -49,23 +170,20 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json(reminder);
-}
+  const deadlines = [...(currentUser.deadlines || [])];
 
-export async function DELETE(request: Request) {
-  const currentUser = await getCurrentUser();
+  deadlines.push(reminder.id);
 
-  if (!currentUser) {
-    throw new Error("no user!");
-  }
-
-  const deletedReminders = await prisma.reminder.deleteMany({
+  const user = await prisma.user.update({
     where: {
-      userId: currentUser.id,
+      id: currentUser.id,
+    },
+    data: {
+      deadlines,
     },
   });
 
-  return NextResponse.json(currentUser.name);
+  return NextResponse.json(user);
 }
 
 export async function GET(request: Request) {
@@ -75,16 +193,13 @@ export async function GET(request: Request) {
     throw new Error("no user!");
   }
 
-  const reminders = await prisma.reminder.findMany({
+  const deadlines = await prisma.reminder.findMany({
     where: {
-      userId: currentUser.id,
+      id: {
+        in: currentUser.deadlines,
+      },
     },
   });
 
-  const newReminders = reminders.map((reminder) => ({
-    ...reminder,
-    date: reminder.date?.toISOString(),
-  }));
-
-  return NextResponse.json(newReminders);
+  return NextResponse.json(deadlines);
 }
