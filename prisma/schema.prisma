@@ -19,6 +19,7 @@ model User {
   image             String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+  deadlines         String[] @db.ObjectId
 
   accounts          Account[]
   reminders         Reminder[]
@@ -29,7 +30,7 @@ model Reminder {
   userId            String @db.ObjectId
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-  date              DateTime?
+  date              String?
   time              String?
   priority          String
   title             String @unique
