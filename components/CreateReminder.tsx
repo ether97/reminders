@@ -39,16 +39,9 @@ const CreateReminder: React.FC<{
   currentUser?: User | null;
 }> = ({ disabled, currentUser }) => {
   const [addReminder, response] = useAddReminderMutation();
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<any>(new Date());
   const form = useForm<ReminderFormSchemaType>({
     resolver: zodResolver(reminderFormSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      priority: "High",
-      date: new Date(),
-      time: "",
-    },
   });
 
   async function onSubmit(data: ReminderFormSchemaType) {
@@ -112,12 +105,11 @@ const CreateReminder: React.FC<{
                     <AccordionTrigger>When is the deadline?</AccordionTrigger>
                     <AccordionContent>
                       <div className="flex flex-col gap-1 items-center w-fit mx-auto">
-                        <Calendar
-                          mode="single"
-                          selected={date}
+                        <Input
+                          type="date"
                           onSelect={setDate}
+                          defaultValue={date}
                           {...form.register("date")}
-                          className="rounded-md border"
                         />
                         <Input
                           type="time"
