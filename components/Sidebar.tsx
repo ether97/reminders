@@ -1,6 +1,8 @@
 "use client";
 
-import { Reminder, User } from "@prisma/client";
+import { Reminder } from "@/app/types/types";
+
+import { User } from "@prisma/client";
 import { IChildren } from "../app/types/types";
 import { FaUserCheck, FaUserPlus } from "react-icons/fa";
 import { SiClockify } from "react-icons/si";

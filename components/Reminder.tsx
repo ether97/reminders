@@ -6,7 +6,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { useDeleteReminderMutation } from "@/app/services/reminder";
+import { useDeleteReminderByIdMutation } from "@/app/services/reminder";
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -15,7 +15,7 @@ const ReminderComponent: React.FC<{
   priority: string;
   id: string;
 }> = ({ label, priority, id: reminderId }) => {
-  const [deleteReminder] = useDeleteReminderMutation();
+  const [deleteReminder] = useDeleteReminderByIdMutation();
   const router = useRouter();
   const [effect, setEffect] = useState(false);
 

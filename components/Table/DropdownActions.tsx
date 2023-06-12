@@ -8,20 +8,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Reminder } from "@prisma/client";
+import { Reminder } from "@/app/types/types";
 
 import { Row } from "@tanstack/react-table";
 
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import Modal from "../Modal";
 import { FaTrashAlt } from "react-icons/fa";
-import { useDeleteReminderMutation } from "@/app/services/reminder";
+import { useDeleteReminderByIdMutation } from "@/app/services/reminder";
 import EditReminder from "../EditReminder";
 
 const DropdownActions: React.FC<{
   data: Partial<Reminder>;
 }> = ({ data }) => {
-  const [deleteReminder] = useDeleteReminderMutation();
+  const [deleteReminder] = useDeleteReminderByIdMutation();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>

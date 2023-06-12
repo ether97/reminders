@@ -1,6 +1,5 @@
 "use client";
 
-import { Reminder, User } from "@prisma/client";
 import Subcategory from "./Subcategory";
 import ReminderComponent from "./Reminder";
 import { RiFilePaper2Line } from "react-icons/ri";

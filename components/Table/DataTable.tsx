@@ -1,6 +1,6 @@
 "use client";
 
-import { Reminder } from "@prisma/client";
+import { Reminder } from "@/app/types/types";
 
 declare module "@tanstack/table-core" {
   interface SortingFns {
@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/table";
 import { useMemo, useState } from "react";
 import {
-  useDeleteReminderMutation,
+  useDeleteReminderByIdMutation,
   useGetRemindersQuery,
 } from "@/app/services/reminder";
 
@@ -38,7 +38,7 @@ interface DataTableProps {
 }
 
 export function DataTable({ columns, data }: DataTableProps) {
-  const [deleteReminder] = useDeleteReminderMutation();
+  const [deleteReminder] = useDeleteReminderByIdMutation();
 
   const prioritySort = useMemo(
     () =>

@@ -5,7 +5,8 @@ import { IconType } from "react-icons";
 import axios from "axios";
 
 import { toast } from "react-hot-toast";
-import { Reminder } from "@prisma/client";
+import { Reminder } from "@/app/types/types";
+
 import { twMerge } from "tailwind-merge";
 import { MouseEventHandler } from "react";
 

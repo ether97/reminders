@@ -18,7 +18,7 @@ import {
 import toast from "react-hot-toast";
 import { Label } from "./ui/label";
 import { useRouter } from "next/navigation";
-import { Reminder } from "@prisma/client";
+import { Reminder } from "@/app/types/types";
 
 import {
   Dialog,
@@ -45,7 +45,7 @@ const EditReminder: React.FC<{
       title: currentData?.title?.substring(0, 20) || "",
       description: currentData?.description?.substring(0, 150) || "",
       priority: currentData?.priority || "High",
-      date: currentData?.date || new Date(),
+      date: currentData?.date || "",
       time: currentData?.time || "",
     },
   });

@@ -47,7 +47,6 @@ const LoginForm: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
       setIsLoading(false);
       if (callback?.ok) {
         document.getElementById("closeDialog")?.click();
-        router.refresh();
         reset();
         toast.success("Logged in!");
       }

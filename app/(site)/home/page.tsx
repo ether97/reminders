@@ -1,8 +1,4 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import getReminders from "@/app/actions/getReminders";
-
-import { Suspense } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 import HomeClient from "./HomeClient";
 
 export default async function Home() {
