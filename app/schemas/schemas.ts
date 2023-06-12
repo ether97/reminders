@@ -22,7 +22,7 @@ export const reminderFormSchema = z.object({
   title: z.string().min(1, { message: "Title required!" }),
   description: z.string().max(160),
   priority: z.string(),
-  date: z.date(),
+  date: z.string(),
   time: z.string(),
 });
 
@@ -48,6 +48,6 @@ export const editReminderFormSchema = z.object({
   title: z.string().min(1, { message: "Title required!" }),
   description: z.string().max(160),
   priority: z.string(),
-  date: z.date(),
+  date: z.string(),
   time: z.string(),
 });
