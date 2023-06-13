@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/accordion";
 import toast from "react-hot-toast";
 import { Label } from "./ui/label";
-import { useRouter } from "next/navigation";
 import { Reminder } from "@/app/types/types";
 
 import {

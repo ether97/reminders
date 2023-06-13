@@ -3,7 +3,6 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import ToasterProvider from "./lib/Toast";
 import getCurrentUser from "./actions/getCurrentUser";
-import getReminders from "./actions/getReminders";
 import ShadToaster from "./lib/ShadToast";
 import RTKProvider from "./providers/RTKProvider";
 
@@ -20,8 +19,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const currentUser = await getCurrentUser();
-  const reminders = await getReminders();
-  console.log(reminders);
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -29,9 +26,7 @@ export default async function RootLayout({
         <ToasterProvider />
         <ShadToaster />
         <RTKProvider>
-          <Sidebar currentUser={currentUser} reminders={reminders}>
-            {children}
-          </Sidebar>
+          <Sidebar currentUser={currentUser}>{children}</Sidebar>
         </RTKProvider>
       </body>
     </html>
