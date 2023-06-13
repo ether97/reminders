@@ -23,6 +23,17 @@ model User {
 
   accounts          Account[]
   reminders         Reminder[]
+  expiredReminders  ExpiredReminders[]
+}
+
+model ExpiredReminders {
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String @db.ObjectId
+  title             String @unique
+  description       String?
+  priority          String
+
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade )
 }
 
 model Reminder {
