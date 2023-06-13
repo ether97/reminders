@@ -19,6 +19,18 @@ export const reminderApi = createApi({
         method: "GET",
       }),
       providesTags: ["Reminders"],
+      transformResponse: (response: any) => {
+        let newResponse = response.map((reminder: Reminder) => {
+          if (
+            new Date(reminder.date ?? "") < new Date(new Date().toDateString())
+          ) {
+            return { ...reminder, date: "Expired" };
+          }
+          return reminder;
+        });
+
+        return newResponse;
+      },
     }),
     deleteAll: builder.mutation<User, void>({
       query: () => ({
