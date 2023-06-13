@@ -5,6 +5,7 @@ import { Reminder } from "@/app/types/types";
 declare module "@tanstack/table-core" {
   interface SortingFns {
     myCustomSorting: SortingFn<unknown>;
+    myDeadlineSorting: SortingFn<unknown>;
   }
 }
 
@@ -59,6 +60,26 @@ export function DataTable({ columns, data }: DataTableProps) {
     []
   );
 
+  const deadlineSort = useMemo(
+    () =>
+      (rowA: any, rowB: any, columnId: any): number => {
+        if (!rowA.original.date && !rowB.original.date) return 0;
+        if (!rowA.original.date) return 1;
+        if (!rowB.original.date) return -1;
+        if (!rowA.original.date === !rowB.original.date) {
+          return new Date(rowA.original.time ?? "") <
+            new Date(rowB.original.time ?? "")
+            ? 1
+            : -1;
+        }
+        return new Date(rowA.original.date ?? "") <
+          new Date(rowB.original.date ?? "")
+          ? 1
+          : -1;
+      },
+    []
+  );
+
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
@@ -72,6 +93,7 @@ export function DataTable({ columns, data }: DataTableProps) {
     },
     sortingFns: {
       myCustomSorting: prioritySort,
+      myDeadlineSorting: deadlineSort,
     },
   });
 

@@ -32,15 +32,20 @@ import Combine from "../Combine";
 import DeleteAll from "../DeleteAll";
 import { AiOutlineStop } from "react-icons/ai";
 import DeleteReminder from "../DeleteReminder";
+import { priorities } from "./data/data";
 
 const formatTime = (time: string): string => {
   let firstTwo = Number(time.slice(0, 2));
+  let end = time.slice(1, time.length);
   if (firstTwo <= 12) {
-    let removedFirst = time.slice(1, time.length);
-    return `${removedFirst} AM`;
+    if (firstTwo < 10) {
+      let removedFirst = time.slice(1, time.length);
+      return `${removedFirst} AM`;
+    }
+    return `${time} AM`;
   } else {
     firstTwo -= 12;
-    return `${time} PM`;
+    return `${firstTwo + end} PM`;
   }
   return "";
 };
@@ -91,6 +96,7 @@ export const columns: ColumnDef<
         row.time ? formatTime(row.time) : ""
       }`;
     },
+    sortingFn: "myDeadlineSorting",
   },
   // {
   //   accessorKey: "priority",
@@ -114,6 +120,20 @@ export const columns: ColumnDef<
             <BiArrowToRight size={24} />
           )}
         </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const priority = priorities.find(
+        (priority) => priority.value === row.getValue("Priority")
+      );
+      console.log(row.getValue("Priority"));
+      if (!priority) return null;
+
+      return (
+        <div className="flex items-center w-full justify-center">
+          <span>{priority.label}</span>
+          {priority.icon && <priority.icon size={24} />}
+        </div>
       );
     },
     sortingFn: "myCustomSorting",

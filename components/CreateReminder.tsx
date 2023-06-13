@@ -108,10 +108,13 @@ const CreateReminder: React.FC<{
                         <Input
                           type="date"
                           onSelect={setDate}
+                          min={new Date().toISOString().split("T")[0]}
                           defaultValue={date}
                           {...form.register("date")}
+                          className="focus:outline-none"
                         />
                         <Input
+                          value={new Date().toTimeString().split(" ")[0]}
                           type="time"
                           id="time"
                           {...form.register("time")}
