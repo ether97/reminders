@@ -30,6 +30,8 @@ import { useDeleteReminderByIdMutation } from "@/app/services/reminder";
 import EditReminder from "../EditReminder";
 import Combine from "../Combine";
 import DeleteAll from "../DeleteAll";
+import { AiOutlineStop } from "react-icons/ai";
+import DeleteReminder from "../DeleteReminder";
 
 const formatTime = (time: string): string => {
   let firstTwo = Number(time.slice(0, 2));
@@ -80,10 +82,15 @@ export const columns: ColumnDef<
   },
   {
     id: "Deadline",
-    accessorFn: (row) =>
-      `${row.date ? new Date(row.date).toLocaleDateString() : ""} ${
+    accessorFn: (row) => {
+      if (row.date === "Expired") {
+        return "Expired";
+      }
+
+      return `${row.date ? new Date(row.date).toLocaleDateString() : ""} ${
         row.time ? formatTime(row.time) : ""
-      }`,
+      }`;
+    },
   },
   // {
   //   accessorKey: "priority",
@@ -115,20 +122,20 @@ export const columns: ColumnDef<
     id: "Delete",
     header: "Delete",
     cell: ({ row }) => {
-      return (
-        <div className="flex flex-row items-center justify-center cursor-pointer">
-          <FaTrashAlt
-            size={20}
-            className="text-rose-800 cursor-pointer hover:scale-125 transition duration-300 ease-in-out"
-          />
-        </div>
-      );
+      return <DeleteReminder data={row.original} />;
     },
   },
   {
     id: "Edit",
     header: "Edit",
     cell: ({ row }) => {
+      if (row.original.date === "Expired") {
+        return (
+          <div className="flex flex-row items-center justify-center w-full ">
+            <AiOutlineStop size={20} className="text-black" />
+          </div>
+        );
+      }
       return <EditReminder currentData={row.original} />;
     },
   },

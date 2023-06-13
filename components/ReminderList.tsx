@@ -17,14 +17,18 @@ const ReminderList = () => {
     content.push(
       <div className="flex flex-col w-full h-fit">
         <Subcategory label="My Reminders" icon={RiFilePaper2Line} inverted />
-        {data.map((reminder) => (
-          <ReminderComponent
-            key={reminder.title}
-            label={reminder.title!}
-            priority={reminder.priority!}
-            id={reminder.id!}
-          />
-        ))}
+        {data.map((reminder) => {
+          if (reminder.date !== "Expired") {
+            return (
+              <ReminderComponent
+                key={reminder.title}
+                label={reminder.title}
+                priority={reminder.priority}
+                title={reminder.title}
+              />
+            );
+          }
+        })}
       </div>
     );
   } else if (error) {
