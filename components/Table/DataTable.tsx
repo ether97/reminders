@@ -33,8 +33,10 @@ import {
 } from "@/app/services/reminder";
 
 interface DataTableProps {
-  columns: ColumnDef<Partial<Reminder>>[];
-  data: Partial<Reminder>[];
+  columns: ColumnDef<
+    Pick<Reminder, "title" | "date" | "time" | "priority" | "id">
+  >[];
+  data: Pick<Reminder, "title" | "date" | "time" | "priority" | "id">[];
 }
 
 export function DataTable({ columns, data }: DataTableProps) {
@@ -102,6 +104,11 @@ export function DataTable({ columns, data }: DataTableProps) {
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                className={`${
+                  row.original.date === "Expired"
+                    ? "bg-zinc-600 cursor-not-allowed"
+                    : ""
+                }`}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
