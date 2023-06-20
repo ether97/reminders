@@ -91,10 +91,9 @@ export const columns: ColumnDef<
       if (row.date === "Expired") {
         return "Expired";
       }
-
-      return `${row.date ? new Date(row.date).toLocaleDateString() : ""} ${
-        row.time ? formatTime(row.time) : ""
-      }`;
+      const sub = new Date(row.date).toUTCString().substring(0, 17);
+      console.log("sub: ", sub);
+      return `${row.date ? sub : ""} ${row.time ? formatTime(row.time) : ""}`;
     },
     sortingFn: "myDeadlineSorting",
   },
@@ -156,6 +155,7 @@ export const columns: ColumnDef<
           </div>
         );
       }
+      console.log("row: ", row.original);
       return <EditReminder currentData={row.original} />;
     },
   },

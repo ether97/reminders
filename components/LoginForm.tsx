@@ -27,8 +27,12 @@ import { formSchema } from "@/app/schemas/schemas";
 import { FormSchemaType } from "@/app/schemas/schemas";
 
 import { FaUserCheck } from "react-icons/fa";
+import { User } from "@prisma/client";
 
-const LoginForm: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
+const LoginForm: React.FC<{
+  disabled?: boolean;
+  currentUser?: User | null;
+}> = ({ disabled, currentUser }) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const {
@@ -46,6 +50,7 @@ const LoginForm: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
     }).then((callback) => {
       setIsLoading(false);
       if (callback?.ok) {
+        router.refresh();
         document.getElementById("closeDialog")?.click();
         reset();
         toast.success("Logged in!");

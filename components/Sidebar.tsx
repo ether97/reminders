@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import ReminderList from "./ReminderList";
 import CreateReminder from "./CreateReminder";
 import { Skeleton } from "./ui/skeleton";
+import RegisterForm from "./RegisterForm";
 
 const Sidebar: React.FC<IChildren & { currentUser: User | null }> = ({
   children,
@@ -71,10 +72,13 @@ const Sidebar: React.FC<IChildren & { currentUser: User | null }> = ({
             {currentUser ? (
               <Subcategory label="Logout" icon={MdLogout} onClick={signOut} />
             ) : (
-              <LoginForm disabled={!mounted} />
+              <LoginForm disabled={!mounted} currentUser={currentUser} />
             )}
 
-            {/* <Modal label="Register" icon={FaUserPlus} disabled={!mounted} /> */}
+            <RegisterForm
+              disabled={!mounted || currentUser ? true : false}
+              currentUser={currentUser}
+            />
           </div>
 
           <div>

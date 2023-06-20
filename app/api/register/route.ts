@@ -4,8 +4,6 @@ import prisma from "../../lib/prismadb";
 
 import bcrypt from "bcrypt";
 
-import { Priority } from "@prisma/client";
-
 export async function POST(request: Request) {
   const body = await request.json();
   const { email, name, emailVerified, password } = body;

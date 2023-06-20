@@ -19,18 +19,18 @@ export const reminderApi = createApi({
         method: "GET",
       }),
       providesTags: ["Reminders"],
-      transformResponse: (response: any) => {
-        let newResponse = response.map((reminder: Reminder) => {
-          if (
-            new Date(reminder.date ?? "") < new Date(new Date().toDateString())
-          ) {
-            return { ...reminder, date: "Expired" };
-          }
-          return reminder;
-        });
+      // transformResponse: (response: any) => {
+      //   let newResponse = response.map((reminder: Reminder) => {
+      //     if (
+      //       new Date(reminder.date ?? "") < new Date(new Date().toDateString())
+      //     ) {
+      //       return { ...reminder, date: "Expired" };
+      //     }
+      //     return reminder;
+      //   });
 
-        return newResponse;
-      },
+      //   return newResponse;
+      // },
     }),
     deleteAll: builder.mutation<User, void>({
       query: () => ({
@@ -238,15 +238,14 @@ export const reminderApi = createApi({
     }),
     updateReminder: builder.mutation<
       Reminder,
-      Pick<Reminder, "id"> &
-        Pick<Reminder, "title" | "date" | "time" | "priority" | "id">
+      Pick<Reminder, "id" | "title" | "date" | "time" | "priority">
     >({
-      query: ({ id: reminderId, ...reminder }) => ({
-        url: `/${reminderId}`,
+      query: ({ ...reminder }) => ({
+        url: "/",
         method: "PATCH",
         body: reminder,
       }),
-      async onQueryStarted({ id, ...reminder }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ ...reminder }, { dispatch, queryFulfilled }) {
         const updateResult = dispatch(
           reminderApi.util.updateQueryData(
             "getReminders",
@@ -258,12 +257,14 @@ export const reminderApi = createApi({
               >[]
             ) => {
               draft = draft.map((oldReminder) => {
-                if (oldReminder.id === id) {
+                if (oldReminder.id === reminder.id) {
+                  console.log(reminder);
                   return reminder;
                 } else {
                   return oldReminder;
                 }
               });
+              return draft;
             }
           )
         );

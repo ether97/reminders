@@ -22,8 +22,8 @@ export const reminderFormSchema = z.object({
   title: z.string().min(1, { message: "Title required!" }),
   description: z.string().max(160),
   priority: z.string(),
-  date: z.string(),
-  time: z.string(),
+  date: z.string().min(1, { message: "Date required!" }),
+  time: z.string()
 });
 
 export const registerFormSchema = z.object({

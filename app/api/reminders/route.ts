@@ -11,12 +11,9 @@ export async function DELETE(request: Request) {
     throw new Error("Not logged in!");
   }
 
-  const user = await prisma.user.update({
+  const user = await prisma.reminder.deleteMany({
     where: {
       id: currentUser.id,
-    },
-    data: {
-      deadlines: [],
     },
   });
 
@@ -30,27 +27,23 @@ export async function PATCH(request: Request) {
     throw new Error("Not logged in!");
   }
 
-  const data: Pick<Reminder, "title" | "date" | "time" | "priority" | "id">[] =
+  const data: Pick<Reminder, "title" | "date" | "time" | "priority" | "id"> =
     await request.json();
 
-  const titles = data.map((reminder) => reminder.title);
+  console.log(data);
 
-  const user = await prisma.user.update({
+  const { id, ...withoutId } = data;
+
+  const updateReminder = await prisma.reminder.update({
     where: {
-      id: currentUser.id,
+      id: id,
     },
     data: {
-      reminders: {
-        deleteMany: {
-          title: {
-            in: titles,
-          },
-        },
-      },
+      ...withoutId,
     },
   });
 
-  return NextResponse.json(user);
+  return NextResponse.json(updateReminder);
 }
 
 export async function PUT(request: Request) {
@@ -200,6 +193,8 @@ export async function GET(request: Request) {
       },
     },
   });
+
+  console.log("deadlines:", deadlines);
 
   return NextResponse.json(deadlines);
 }

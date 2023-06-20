@@ -7,6 +7,7 @@ import { columns } from "../../../components/Table/ReminderColumns";
 
 const HomeClient = () => {
   const { data, isLoading, error } = useGetRemindersQuery();
+  console.log("data: ", data);
 
   if (isLoading) {
     return (

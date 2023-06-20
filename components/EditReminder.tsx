@@ -35,23 +35,30 @@ import { useUpdateReminderMutation } from "@/app/services/reminder";
 import { BsPenFill } from "react-icons/bs";
 
 const EditReminder: React.FC<{
-  currentData: Partial<Reminder>;
+  currentData: Pick<
+    Reminder,
+    "title" | "date" | "time" | "priority" | "id" | "description"
+  >;
 }> = ({ currentData }) => {
   const [updateReminder] = useUpdateReminderMutation();
   const form = useForm<EditReminderFormSchemaType>({
     resolver: zodResolver(editReminderFormSchema),
     defaultValues: {
-      title: currentData?.title?.substring(0, 20) || "",
-      description: currentData?.description?.substring(0, 150) || "",
-      priority: currentData?.priority || "High",
-      date: currentData?.date || "",
-      time: currentData?.time || "",
+      title: currentData.title.substring(0, 20) || "",
+      description: currentData.description?.substring(0, 150) || "",
+      priority: currentData.priority || "High",
+      date: currentData.date || "",
+      time: currentData.time || "",
     },
   });
 
   async function onSubmit(data: EditReminderFormSchemaType) {
-    updateReminder({ id: currentData.id!, ...data })
-      .then(() => toast.success("Reminder updated!"))
+    console.log(currentData.id);
+    updateReminder({ id: currentData.id, ...data })
+      .then(() => {
+        document.getElementById("closeDialog")?.click();
+        toast.success("Reminder updated!");
+      })
       .catch(() => toast.error("Couldnt update reminder!"));
   }
 
@@ -66,7 +73,7 @@ const EditReminder: React.FC<{
       <DialogContent className="relative">
         <DialogHeader>
           <DialogTitle className="text-center py-2">
-            {currentData.time}
+            {currentData.title}
           </DialogTitle>
           <DialogDescription>
             <form

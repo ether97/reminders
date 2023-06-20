@@ -8,6 +8,10 @@
   margin: 0;
 }
 
+input {
+  color: white;
+}
+
 html,
 body,
 :root {

@@ -33,13 +33,16 @@ import { FaUserCheck } from "react-icons/fa";
 import { ReminderFormSchemaType } from "@/app/schemas/schemas";
 import { reminderFormSchema } from "@/app/schemas/schemas";
 import { User } from "@prisma/client";
+import ErrorMessage from "./ErrorMessage";
 
 const CreateReminder: React.FC<{
   disabled?: boolean;
   currentUser?: User | null;
 }> = ({ disabled, currentUser }) => {
   const [addReminder, response] = useAddReminderMutation();
-  const [date, setDate] = useState<any>(new Date());
+  const [date, setDate] = useState<any>(null);
+  const [dateCheck, setDateCheck] = useState(true);
+  const [timeCheck, setTimeCheck] = useState(false);
   const form = useForm<ReminderFormSchemaType>({
     resolver: zodResolver(reminderFormSchema),
   });
@@ -84,7 +87,11 @@ const CreateReminder: React.FC<{
                   <Label htmlFor="Title" className="text-white">
                     Title:{" "}
                   </Label>
-
+                  {form.formState.errors.title && (
+                    <ErrorMessage
+                      message={form.formState.errors.title?.message}
+                    />
+                  )}
                   <Input
                     type="text"
                     id="Title"
@@ -96,33 +103,23 @@ const CreateReminder: React.FC<{
                   <Label htmlFor="Description">Description: </Label>
                   <Textarea {...form.register("description")} />
                 </div>
-                <Accordion
-                  type="single"
-                  collapsible
-                  className="w-full text-white"
-                >
-                  <AccordionItem value="item-1">
-                    <AccordionTrigger>When is the deadline?</AccordionTrigger>
-                    <AccordionContent>
-                      <div className="flex flex-col gap-1 items-center w-fit mx-auto">
-                        <Input
-                          type="date"
-                          onSelect={setDate}
-                          min={new Date().toISOString().split("T")[0]}
-                          defaultValue={date}
-                          {...form.register("date")}
-                          className="focus:outline-none"
-                        />
-                        <Input
-                          value={new Date().toTimeString().split(" ")[0]}
-                          type="time"
-                          id="time"
-                          {...form.register("time")}
-                        />
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
+
+                <div className="flex flex-row gap-5 items-center w-fit mx-auto">
+                  <div>
+                    <Input
+                      type="date"
+                      onSelect={setDate}
+                      min={new Date().toISOString().split("T")[0]}
+                      // defaultValue={date}
+                      {...form.register("date")}
+                      className={`focus:outline-none ${
+                        !dateCheck ? "border-rose-600 text-rose-600" : ""
+                      }`}
+                      onClick={() => setDateCheck(true)}
+                    />
+                  </div>
+                  <Input type="time" id="time" {...form.register("time")} />
+                </div>
 
                 <div className="flex flex-row gap-x-3 my-2 items-center">
                   <Label htmlFor="priority" className="text-white">
@@ -147,6 +144,11 @@ const CreateReminder: React.FC<{
                 <Button
                   type="submit"
                   className="bg-lightbackground my-2 text-white"
+                  onClick={() => {
+                    if (!date) {
+                      setDateCheck(false);
+                    }
+                  }}
                 >
                   Create
                 </Button>

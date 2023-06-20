@@ -15,7 +15,7 @@ export type Reminder = {
   userId: string;
   createdAt?: Date;
   updatedAt?: Date;
-  date?: string;
+  date: string;
   time?: string;
   priority: string;
   title: string;
