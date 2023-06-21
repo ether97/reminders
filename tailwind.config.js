@@ -24,6 +24,10 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        getWide: {
+          from: { width: "20px" },
+          to: { width: "50px" },
+        },
         slide: {
           from: { opacity: 1 },
           to: { display: "none", transform: "translateX(-1000px)" },
@@ -38,6 +42,7 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
         slide: "slide 1s ease-out",
         enlarge: "enlarge 2s ease-in-out infinite ",
+        getWide: "getWide 1s ease-in-out",
       },
     },
   },

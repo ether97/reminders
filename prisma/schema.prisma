@@ -24,6 +24,7 @@ model User {
   accounts          Account[]
   reminders         Reminder[]
   expiredReminders  ExpiredReminders[]
+  categories        Category[]
 }
 
 model ExpiredReminders {
@@ -39,6 +40,7 @@ model ExpiredReminders {
 model Reminder {
   id                String @id @default(auto()) @map("_id") @db.ObjectId
   userId            String @db.ObjectId
+  categoryId        String @db.ObjectId
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
   date              String?
@@ -48,10 +50,17 @@ model Reminder {
   description       String?
 
   user              User @relation(fields: [userId], references: [id], onDelete: Cascade )
-
+  category          Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
+model Category {
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  title             String
+  userId            String @db.ObjectId
 
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade )
+  reminders         Reminder[]
+}
 
 model Account {
   id                String @id @default(auto()) @map("_id") @db.ObjectId

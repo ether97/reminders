@@ -4,6 +4,11 @@ export type FormSchemaType = z.infer<typeof formSchema>;
 export type ReminderFormSchemaType = z.infer<typeof reminderFormSchema>;
 export type RegisterFormSchemaType = z.infer<typeof registerFormSchema>;
 export type EditReminderFormSchemaType = z.infer<typeof editReminderFormSchema>;
+export type CategorySchemaType = z.infer<typeof categorySchema>;
+
+export const categorySchema = z.object({
+  title: z.string().min(1, { message: "Title required!" }),
+});
 
 export const formSchema = z.object({
   email: z.string().email(),
@@ -23,7 +28,7 @@ export const reminderFormSchema = z.object({
   description: z.string().max(160),
   priority: z.string(),
   date: z.string().min(1, { message: "Date required!" }),
-  time: z.string()
+  time: z.string(),
 });
 
 export const registerFormSchema = z.object({

@@ -15,13 +15,17 @@ import ReminderList from "./ReminderList";
 import CreateReminder from "./CreateReminder";
 import { Skeleton } from "./ui/skeleton";
 import RegisterForm from "./RegisterForm";
+import CreateProject from "./CreateCategory";
+import CreateCategory from "./CreateCategory";
+import { useGetCategoriesQuery } from "@/app/services/category";
+import Category from "./Category";
 
 const Sidebar: React.FC<IChildren & { currentUser: User | null }> = ({
   children,
   currentUser,
 }) => {
   const [mounted, setMounted] = useState(false);
-
+  const { data: categories, isLoading, error } = useGetCategoriesQuery();
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -82,10 +86,19 @@ const Sidebar: React.FC<IChildren & { currentUser: User | null }> = ({
           </div>
 
           <div>
-            <CreateReminder currentUser={currentUser} />
+            {currentUser && (
+              <>
+                <CreateReminder currentUser={currentUser} />
+                <CreateCategory currentUser={currentUser} />
+              </>
+            )}
           </div>
-
-          {currentUser && <ReminderList />}
+          <div>
+            {currentUser && <ReminderList />}
+            {categories?.map((category) => (
+              <Category title={category.title} />
+            ))}
+          </div>
         </div>
       </div>
       <main className="h-full flex-1 bg-background ">{children}</main>

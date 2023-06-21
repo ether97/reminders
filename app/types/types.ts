@@ -13,6 +13,7 @@ export type SubCategories = {
 export type Reminder = {
   id?: string;
   userId: string;
+  categoryId?: string;
   createdAt?: Date;
   updatedAt?: Date;
   date: string;
@@ -21,3 +22,7 @@ export type Reminder = {
   title: string;
   description?: string;
 };
+
+export interface Category {
+  title: string;
+}
