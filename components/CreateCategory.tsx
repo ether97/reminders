@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import React from "react";
+import React, { useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,12 +28,11 @@ const CreateCategory: React.FC<{ currentUser: User; disabled?: boolean }> = ({
   disabled,
 }) => {
   const [addCategory] = useAddCategoryMutation();
-  const form = useForm<CategorySchemaType>({
-    resolver: zodResolver(categorySchema),
-  });
+  const [title, setTitle] = useState("");
 
-  async function onSubmit(data: CategorySchemaType) {
-    addCategory(data)
+  async function onSubmit() {
+    console.log(title);
+    addCategory(title)
       .then(() => {
         toast.success("Category added!");
       })
@@ -63,13 +62,11 @@ const CreateCategory: React.FC<{ currentUser: User; disabled?: boolean }> = ({
               </p>
             ) : (
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={onSubmit}
                 className="flex flex-col w-full color-white"
               >
-                <Input type="text" {...form.register("title")} />
-                {form.formState.errors.title && (
-                  <ErrorMessage message={form.formState.errors.title.message} />
-                )}
+                <Input type="text" onChange={(e) => setTitle(e.currentTarget.value)} />
+
                 <Button
                   type="submit"
                   className="bg-lightbackground my-2 text-white"

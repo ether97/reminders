@@ -10,27 +10,26 @@ export const categoryApi = createApi({
   tagTypes: ["Categories"],
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   endpoints: (builder) => ({
-    getCategories: builder.query<Category[] | [], void>({
+    getCategories: builder.query<string[], void>({
       query: () => ({
         url: "/",
         method: "GET",
       }),
       providesTags: ["Categories"],
     }),
-    addCategory: builder.mutation<Category, Category>({
-      query: ({ ...category }) => ({
-        url: "/",
+    addCategory: builder.mutation<Category, string>({
+      query: (title) => ({
+        url: `/${title}`,
         method: "POST",
-        body: category,
       }),
-      async onQueryStarted({ ...category }, { dispatch, queryFulfilled }) {
+      async onQueryStarted(title, { dispatch, queryFulfilled }) {
         const addCategory = dispatch(
           categoryApi.util.updateQueryData(
             "getCategories",
             undefined,
-            (draft: Category[]) => {
-              if (category) {
-                draft.push(category);
+            (draft: string[]) => {
+              if (title) {
+                draft.push(title);
               }
             }
           )
@@ -42,7 +41,33 @@ export const categoryApi = createApi({
         }
       },
     }),
+    deleteCategory: builder.mutation<string[], string>({
+      query: (title) => ({
+        url: `/${title}`,
+        method: "DELETE",
+      }),
+      async onQueryStarted(title, { dispatch, queryFulfilled }) {
+        const deleteCategory = dispatch(
+          categoryApi.util.updateQueryData(
+            "getCategories",
+            undefined,
+            (draft: string[]) => {
+              return draft.filter((categoryTitle) => categoryTitle !== title);
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          deleteCategory.undo();
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetCategoriesQuery, useAddCategoryMutation } = categoryApi;
+export const {
+  useGetCategoriesQuery,
+  useAddCategoryMutation,
+  useDeleteCategoryMutation,
+} = categoryApi;

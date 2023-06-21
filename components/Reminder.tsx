@@ -32,7 +32,7 @@ const ReminderComponent: React.FC<{
           : ""
       }
       ${effect && "animate-slide"}
-      relative flex-row gap-3 items-center w-full  rounded-md text-md py-1 px-4 my-2 
+      relative flex-row gap-3 items-center w-full  rounded-md text-md px-4 my-2 py-1
     `}
       onAnimationEnd={() => setEffect(false)}
     >
@@ -40,7 +40,7 @@ const ReminderComponent: React.FC<{
       <AiOutlineCloseCircle
         onClick={handleClick}
         size={20}
-        className="absolute right-[10px] cursor-pointer top-[6px] text-white hover:scale-125 transition duration-200 hover:rotate-180"
+        className="absolute right-[10px] cursor-pointer my-auto top-0 bottom-0  text-white hover:scale-125 transition duration-200 hover:rotate-180"
       />
     </div>
   );

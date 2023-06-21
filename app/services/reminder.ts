@@ -11,7 +11,11 @@ export const reminderApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   endpoints: (builder) => ({
     getReminders: builder.query<
-      Pick<Reminder, "title" | "date" | "time" | "priority" | "id">[] | [],
+      | Pick<
+          Reminder,
+          "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
+        >[]
+      | [],
       void
     >({
       query: () => ({
@@ -45,7 +49,7 @@ export const reminderApi = createApi({
             (
               draft: Pick<
                 Reminder,
-                "title" | "date" | "time" | "priority" | "id"
+                "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
               >[]
             ) => {
               return [];
@@ -61,7 +65,10 @@ export const reminderApi = createApi({
     }),
     addReminder: builder.mutation<
       Reminder,
-      Pick<Reminder, "title" | "date" | "time" | "priority" | "id">
+      Pick<
+        Reminder,
+        "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
+      >
     >({
       query: ({ ...reminder }) => ({
         url: "/",
@@ -76,7 +83,7 @@ export const reminderApi = createApi({
             (
               draft: Pick<
                 Reminder,
-                "title" | "date" | "time" | "priority" | "id"
+                "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
               >[]
             ) => {
               if (reminder) {
@@ -105,7 +112,7 @@ export const reminderApi = createApi({
             (
               draft: Pick<
                 Reminder,
-                "title" | "date" | "time" | "priority" | "id"
+                "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
               >[]
             ) => {
               return draft.filter((reminder) => reminder.id !== reminderId);
@@ -132,7 +139,7 @@ export const reminderApi = createApi({
             (
               draft: Pick<
                 Reminder,
-                "title" | "date" | "time" | "priority" | "id"
+                "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
               >[]
             ) => {
               return draft.filter((item) => item.title !== reminderTitle);
@@ -149,7 +156,10 @@ export const reminderApi = createApi({
     }),
     combineReminders: builder.mutation<
       Reminder,
-      Pick<Reminder, "title" | "date" | "time" | "priority" | "id">[]
+      Pick<
+        Reminder,
+        "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
+      >[]
     >({
       query: ([...reminders]) => ({
         url: "/",
@@ -164,18 +174,28 @@ export const reminderApi = createApi({
             (
               draft: Pick<
                 Reminder,
-                "title" | "date" | "time" | "priority" | "id"
+                "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
               >[]
             ) => {
               const result = reminders.reduce((acc, reminder) => {
                 const compareDates = (
                   acc: Pick<
                     Reminder,
-                    "title" | "date" | "time" | "priority" | "id"
+                    | "title"
+                    | "date"
+                    | "time"
+                    | "priority"
+                    | "id"
+                    | "categoryTitle"
                   >,
                   reminder: Pick<
                     Reminder,
-                    "title" | "date" | "time" | "priority" | "id"
+                    | "title"
+                    | "date"
+                    | "time"
+                    | "priority"
+                    | "id"
+                    | "categoryTitle"
                   >
                 ) => {
                   if (!acc.date) {
@@ -238,7 +258,10 @@ export const reminderApi = createApi({
     }),
     updateReminder: builder.mutation<
       Reminder,
-      Pick<Reminder, "id" | "title" | "date" | "time" | "priority">
+      Pick<
+        Reminder,
+        "id" | "title" | "date" | "time" | "priority" | "categoryTitle"
+      >
     >({
       query: ({ ...reminder }) => ({
         url: "/",
@@ -253,7 +276,7 @@ export const reminderApi = createApi({
             (
               draft: Pick<
                 Reminder,
-                "title" | "date" | "time" | "priority" | "id"
+                "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
               >[]
             ) => {
               draft = draft.map((oldReminder) => {

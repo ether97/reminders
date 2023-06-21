@@ -34,12 +34,14 @@ import { ReminderFormSchemaType } from "@/app/schemas/schemas";
 import { reminderFormSchema } from "@/app/schemas/schemas";
 import { User } from "@prisma/client";
 import ErrorMessage from "./ErrorMessage";
+import { useGetCategoriesQuery } from "@/app/services/category";
 
 const CreateReminder: React.FC<{
   disabled?: boolean;
   currentUser?: User | null;
 }> = ({ disabled, currentUser }) => {
   const [addReminder, response] = useAddReminderMutation();
+  const { data: categories } = useGetCategoriesQuery();
   const [date, setDate] = useState<any>(null);
   const [dateCheck, setDateCheck] = useState(true);
   const [timeCheck, setTimeCheck] = useState(false);
@@ -48,6 +50,7 @@ const CreateReminder: React.FC<{
   });
 
   async function onSubmit(data: ReminderFormSchemaType) {
+    console.log(data);
     addReminder(data)
       .unwrap()
       .then(() => {
@@ -104,8 +107,31 @@ const CreateReminder: React.FC<{
                   <Textarea {...form.register("description")} />
                 </div>
 
-                <div className="flex flex-row gap-5 items-center w-fit mx-auto">
-                  <div>
+                <div className="flex flex-col gap-y-3 my-2 w-full">
+                  <Label htmlFor="priority" className="text-white">
+                    Priority:{" "}
+                  </Label>
+                  <select
+                    {...form.register("priority")}
+                    className="text-white w-full h-10 items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {["High", "Medium", "Low"].map((item) => (
+                      <option
+                        key={item}
+                        value={item}
+                        className="bg-background h-[10px] cursor-pointer transition hover:bg-white text-white hover:text-black"
+                      >
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex flex-row gap-5 my-2 w-full">
+                  <div className="flex flex-row gap-x-2 items-center">
+                    <Label htmlFor="date" className="text-white">
+                      Date:{" "}
+                    </Label>
                     <Input
                       type="date"
                       onSelect={setDate}
@@ -118,24 +144,42 @@ const CreateReminder: React.FC<{
                       onClick={() => setDateCheck(true)}
                     />
                   </div>
-                  <Input type="time" id="time" {...form.register("time")} />
+                  <div className="flex flex-row gap-x-2 items-center flex-1">
+                    <Label htmlFor="time" className="text-white">
+                      Time:{" "}
+                    </Label>
+                    <Input
+                      type="time"
+                      id="time"
+                      {...form.register("time")}
+                      className="w-full"
+                    />
+                  </div>
                 </div>
 
-                <div className="flex flex-row gap-x-3 my-2 items-center">
-                  <Label htmlFor="priority" className="text-white">
-                    Priority:{" "}
+                <div className="flex flex-row gap-x-2 w-full items-center">
+                  <Label htmlFor="categoryTitle" className="text-white">
+                    Category:{" "}
                   </Label>
                   <select
-                    {...form.register("priority")}
-                    className="text-white flex-1 h-10 items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    // disabled={categories?.length === 0}
+                    defaultValue=""
+                    {...form.register("categoryTitle")}
+                    className="text-white w-full h-10 items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    {["High", "Medium", "Low"].map((item) => (
+                    <option
+                      key=""
+                      value=""
+                      selected={true}
+                      className="bg-background h-[10px] cursor-pointer transition hover:bg-white text-white hover:text-black"
+                    ></option>
+                    {categories?.map((title) => (
                       <option
-                        key={item}
-                        value={item}
+                        key={title}
+                        value={title}
                         className="bg-background h-[10px] cursor-pointer transition hover:bg-white text-white hover:text-black"
                       >
-                        {item}
+                        {title}
                       </option>
                     ))}
                   </select>

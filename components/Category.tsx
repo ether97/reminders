@@ -1,16 +1,30 @@
 "use client";
 
 import {
+  useDeleteCategoryMutation,
+  useGetCategoriesQuery,
+} from "@/app/services/category";
+import { useGetRemindersQuery } from "@/app/services/reminder";
+import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { AiOutlineCloseCircle } from "react-icons/ai";
-
-const handleClick = () => {};
+import { GrFormClose } from "react-icons/gr";
+import ReminderComponent from "./Reminder";
 
 const Category: React.FC<{ title: string }> = ({ title }) => {
+  const [deleteCategory] = useDeleteCategoryMutation();
+  const { data: reminders } = useGetRemindersQuery();
+  const filtered = reminders?.filter(
+    (reminder) => reminder.categoryTitle === title
+  );
+  console.log(filtered);
+  const handleClick = () => {
+    deleteCategory(title);
+  };
+
   return (
     <Accordion
       type="single"
@@ -20,9 +34,28 @@ const Category: React.FC<{ title: string }> = ({ title }) => {
       <AccordionItem value="item-1">
         <AccordionTrigger>
           {title}
-          <div className="h-full ease-in absolute right-0 w-[20px] bg-rose-700 hover:animate-getWide transition duration-200"></div>
+          <GrFormClose
+            onClick={handleClick}
+            size={20}
+            className="h-full ease-in absolute right-[10px] text-rose-700 "
+          />
         </AccordionTrigger>
-        <AccordionContent>Reminders here</AccordionContent>
+        <AccordionContent>
+          {filtered && filtered.length > 0 ? (
+            filtered.map((reminder) => {
+              return (
+                <ReminderComponent
+                  key={reminder.title}
+                  label={reminder.title}
+                  priority={reminder.priority}
+                  title={reminder.title}
+                />
+              );
+            })
+          ) : (
+            <p>No reminders yet...</p>
+          )}
+        </AccordionContent>
       </AccordionItem>
     </Accordion>
   );

@@ -16,6 +16,7 @@ interface SubcategoryProps {
   inverted?: boolean;
   onClick?: () => void;
   className?: string;
+  disabled?: boolean;
 }
 
 const Subcategory: React.FC<SubcategoryProps> = ({
@@ -24,6 +25,7 @@ const Subcategory: React.FC<SubcategoryProps> = ({
   inverted,
   onClick,
   className,
+  disabled,
 }) => {
   if (inverted) {
     return (
@@ -44,13 +46,17 @@ const Subcategory: React.FC<SubcategoryProps> = ({
       className={twMerge(
         ` ${
           label === "Create Reminder" ? "animate-enlarge" : "duration-500"
-        } flex flex-row gap-3 items-center w-full px-5 rounded-md text-md hover:bg-lightbackground hover:text-zinc-400 transition cursor-pointer py-2 mt-2 mb-1 group`,
+        } flex flex-row gap-3 items-center w-full px-5 rounded-md text-md ${
+          !disabled && "hover:bg-lightbackground hover:text-zinc-400 transition"
+        }  cursor-pointer py-2 mt-2 mb-1 group`,
         className
       )}
     >
       {Icon && <Icon size={30} className={`  `} />}
       <p
-        className={`w-full text-md text-center hover:text-zinc-400 transition text-white`}
+        className={`w-full text-md text-center ${
+          !disabled && "hover:text-zinc-400 transition"
+        }  text-white`}
       >
         {label}
       </p>

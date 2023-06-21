@@ -19,13 +19,14 @@ import CreateProject from "./CreateCategory";
 import CreateCategory from "./CreateCategory";
 import { useGetCategoriesQuery } from "@/app/services/category";
 import Category from "./Category";
+import CategoryList from "./CategoryList";
+import { RiFilePaper2Line } from "react-icons/ri";
 
 const Sidebar: React.FC<IChildren & { currentUser: User | null }> = ({
   children,
   currentUser,
 }) => {
   const [mounted, setMounted] = useState(false);
-  const { data: categories, isLoading, error } = useGetCategoriesQuery();
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -93,12 +94,18 @@ const Sidebar: React.FC<IChildren & { currentUser: User | null }> = ({
               </>
             )}
           </div>
-          <div>
-            {currentUser && <ReminderList />}
-            {categories?.map((category) => (
-              <Category title={category.title} />
-            ))}
-          </div>
+          {currentUser && (
+            <div>
+              <Subcategory
+                label="My Reminders"
+                icon={RiFilePaper2Line}
+                inverted
+              />
+
+              <CategoryList />
+              <ReminderList />
+            </div>
+          )}
         </div>
       </div>
       <main className="h-full flex-1 bg-background ">{children}</main>

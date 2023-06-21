@@ -11,24 +11,15 @@ export async function GET(request: Request) {
     where: {
       userId: currentUser.id,
     },
-  });
-
-  return NextResponse.json(categories);
-}
-
-export async function POST(request: Request) {
-  const currentUser = await getCurrentUser();
-
-  const body = await request.json();
-
-  if (!currentUser) return null;
-
-  const category = await prisma.category.create({
-    data: {
-      userId: currentUser.id,
-      ...body,
+    select: {
+      title: true,
     },
   });
 
-  return NextResponse.json(category);
+  const justTitles = categories.map((category) => category.title);
+
+  console.log("justTitles:", justTitles);
+
+  return NextResponse.json(justTitles);
 }
+

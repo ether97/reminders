@@ -59,6 +59,7 @@ const RegisterForm: React.FC<{
           label="Register"
           icon={FaUserPlus}
           className={`${disabled && "bg-gray-700 cursor-not-allowed"}`}
+          disabled
         />
       </DialogTrigger>
       <DialogContent>

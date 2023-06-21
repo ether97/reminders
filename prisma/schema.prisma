@@ -11,60 +11,61 @@ datasource db {
 }
 
 model User {
-  id                String @id @default(auto()) @map("_id") @db.ObjectId
-  email             String? @unique
-  name              String?
-  emailVerified     DateTime?
-  hashedPassword    String?
-  image             String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  deadlines         String[] @db.ObjectId
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  email          String?   @unique
+  name           String?
+  emailVerified  DateTime?
+  hashedPassword String?
+  image          String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deadlines      String[]  @db.ObjectId
 
-  accounts          Account[]
-  reminders         Reminder[]
-  expiredReminders  ExpiredReminders[]
-  categories        Category[]
+  accounts         Account[]
+  reminders        Reminder[]
+  expiredReminders ExpiredReminders[]
+  categories       Category[]
 }
 
 model ExpiredReminders {
-  id                String @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String @db.ObjectId
-  title             String @unique
-  description       String?
-  priority          String
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String  @db.ObjectId
+  title       String  @unique
+  description String?
+  priority    String
 
-  user              User @relation(fields: [userId], references: [id], onDelete: Cascade )
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Reminder {
-  id                String @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String @db.ObjectId
-  categoryId        String @db.ObjectId
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  date              String?
-  time              String?
-  priority          String
-  title             String @unique
-  description       String?
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String   @db.ObjectId
+  categoryTitle String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  date          String?
+  time          String?
+  priority      String
+  title         String   @unique
+  description   String?
 
-  user              User @relation(fields: [userId], references: [id], onDelete: Cascade )
-  category          Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryTitle], references: [title], onDelete: Cascade)
 }
 
 model Category {
-  id                String @id @default(auto()) @map("_id") @db.ObjectId
-  title             String
-  userId            String @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String   @unique
+  userId      String   @db.ObjectId
+  reminderIds String[] @db.ObjectId
 
-  user              User @relation(fields: [userId], references: [id], onDelete: Cascade )
-  reminders         Reminder[]
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reminders Reminder[]
 }
 
 model Account {
-  id                String @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String @db.ObjectId
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
   type              String
   provider          String
   providerAccountId String
@@ -76,8 +77,7 @@ model Account {
   id_token          String? @db.String
   session_state     String?
 
-  user              User @relation(fields: [userId], references: [id], onDelete: Cascade )
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-
 }

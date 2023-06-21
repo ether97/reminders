@@ -27,8 +27,10 @@ export async function PATCH(request: Request) {
     throw new Error("Not logged in!");
   }
 
-  const data: Pick<Reminder, "title" | "date" | "time" | "priority" | "id"> =
-    await request.json();
+  const data: Pick<
+    Reminder,
+    "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
+  > = await request.json();
 
   console.log(data);
 
@@ -53,15 +55,23 @@ export async function PUT(request: Request) {
     throw new Error("Not logged in!");
   }
 
-  const data: Pick<Reminder, "title" | "date" | "time" | "priority" | "id">[] =
-    await request.json();
+  const data: Pick<
+    Reminder,
+    "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
+  >[] = await request.json();
 
   console.log(data);
 
   const result = data.reduce((acc, reminder) => {
     const compareDates = (
-      acc: Pick<Reminder, "title" | "date" | "time" | "priority" | "id">,
-      reminder: Pick<Reminder, "title" | "date" | "time" | "priority" | "id">
+      acc: Pick<
+        Reminder,
+        "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
+      >,
+      reminder: Pick<
+        Reminder,
+        "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
+      >
     ) => {
       if (!acc.date) {
         return { id: reminder.id, date: reminder.date };
@@ -104,6 +114,7 @@ export async function PUT(request: Request) {
     const result = compareDates(reminder, acc);
     return {
       ...acc,
+      categoryId: reminder.categoryTitle ?? "",
       title: `${reminder.title} ${acc.title}`,
       date: reminder.date || result.date,
       time: reminder.time || result.time,
@@ -113,6 +124,7 @@ export async function PUT(request: Request) {
 
   const newObject = await prisma.reminder.create({
     data: {
+      categoryTitle: result.categoryTitle ?? "",
       userId: currentUser.id,
       title: result.title,
       date: result.date,

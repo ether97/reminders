@@ -16,9 +16,8 @@ const ReminderList = () => {
   } else if (data) {
     content.push(
       <div className="flex flex-col w-full h-fit">
-        <Subcategory label="My Reminders" icon={RiFilePaper2Line} inverted />
         {data.map((reminder) => {
-          if (reminder.date !== "Expired") {
+          if (reminder.date !== "Expired" && !reminder.categoryTitle) {
             return (
               <ReminderComponent
                 key={reminder.title}
