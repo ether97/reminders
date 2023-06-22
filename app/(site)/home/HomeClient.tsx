@@ -48,7 +48,7 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
             <SheetTrigger>
               <RxDropdownMenu
                 size={40}
-                className="cursor-pointer text-zinc-400 block sm:hidden"
+                className="cursor-pointer text-zinc-400 block lg:hidden"
               />
             </SheetTrigger>
             <SheetContent
@@ -141,7 +141,7 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
             <SheetTrigger>
               <RxDropdownMenu
                 size={40}
-                className="cursor-pointer text-zinc-400 block sm:hidden"
+                className="cursor-pointer text-zinc-400 block lg:hidden"
               />
             </SheetTrigger>
             <SheetContent
@@ -164,7 +164,6 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
                       }
                       position="left"
                       type="outer"
-
                     />
                     <SheetParent
                       trigger={
