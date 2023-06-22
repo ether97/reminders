@@ -29,7 +29,8 @@ import { User } from "@prisma/client";
 const RegisterForm: React.FC<{
   disabled?: boolean;
   currentUser?: User | null;
-}> = ({ disabled, currentUser }) => {
+  mobile?: boolean;
+}> = ({ disabled, currentUser, mobile }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<RegisterFormSchemaType>({
@@ -52,6 +53,71 @@ const RegisterForm: React.FC<{
         toast.error("Registration error!");
       });
   };
+
+  if (mobile) {
+    return (
+      <>
+        {isLoading && (
+          <p className="text-center animate-pulse text-[20px]">
+            Creating your account...
+          </p>
+        )}
+        {!isLoading && (
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
+            <Input
+              type="text"
+              id="name"
+              {...form.register("name")}
+              placeholder="Name"
+            />
+            {form.formState.errors.name && (
+              <ErrorMessage message={form.formState.errors.name?.message} />
+            )}
+            <Input
+              type="text"
+              id="email"
+              {...form.register("email")}
+              placeholder="Email"
+            />
+            {form.formState.errors.email && (
+              <ErrorMessage message={form.formState.errors.email?.message} />
+            )}
+
+            <Input
+              type="password"
+              id="password"
+              {...form.register("password")}
+              placeholder="Password"
+            />
+            {form.formState.errors.password && (
+              <ErrorMessage message={form.formState.errors.password?.message} />
+            )}
+            <Input
+              type="password"
+              id="confirmPassword"
+              {...form.register("confirmPassword")}
+              placeholder="Re-enter Password"
+            />
+            {form.formState.errors.confirmPassword && (
+              <ErrorMessage
+                message={form.formState.errors.confirmPassword?.message}
+              />
+            )}
+            <Button
+              type="submit"
+              // disabled={isSubmitting}
+              className="bg-lightbackground"
+            >
+              Register
+            </Button>
+          </form>
+        )}
+      </>
+    );
+  }
   return (
     <Dialog>
       <DialogTrigger className="w-full">

@@ -32,7 +32,8 @@ import { User } from "@prisma/client";
 const LoginForm: React.FC<{
   disabled?: boolean;
   currentUser?: User | null;
-}> = ({ disabled, currentUser }) => {
+  mobile?: boolean;
+}> = ({ disabled, currentUser, mobile }) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const {
@@ -61,6 +62,49 @@ const LoginForm: React.FC<{
       }
     });
   };
+
+  if (mobile) {
+    return (
+      <>
+        {isLoading && (
+          <p className="text-center animate-pulse text-[20px]">
+            Logging you in...
+          </p>
+        )}
+        {!isLoading && (
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
+            <Input
+              type="text"
+              id="email"
+              {...register("email")}
+              placeholder="Email"
+            />
+            {errors.email && <ErrorMessage message={errors.email?.message} />}
+
+            <Input
+              type="password"
+              id="password"
+              {...register("password")}
+              placeholder="Password"
+            />
+            {errors.password && (
+              <ErrorMessage message={errors.password?.message} />
+            )}
+            <Button
+              type="submit"
+              className="bg-lightbackground w-full text-white"
+            >
+              Login
+            </Button>
+          </form>
+        )}
+      </>
+    );
+  }
+
   return (
     <Dialog>
       <DialogTrigger className="w-full">

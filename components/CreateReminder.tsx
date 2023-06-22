@@ -35,6 +35,7 @@ import { reminderFormSchema } from "@/app/schemas/schemas";
 import { User } from "@prisma/client";
 import ErrorMessage from "./ErrorMessage";
 import { useGetCategoriesQuery } from "@/app/services/category";
+import { mongoObjectId } from "@/app/utils/mongodbID";
 
 const CreateReminder: React.FC<{
   disabled?: boolean;
@@ -51,7 +52,8 @@ const CreateReminder: React.FC<{
 
   async function onSubmit(data: ReminderFormSchemaType) {
     console.log(data);
-    addReminder(data)
+    const ID = mongoObjectId();
+    addReminder({ id: ID, ...data })
       .unwrap()
       .then(() => {
         document.getElementById("closeDialog")?.click();

@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { Reminder } from "../types/types";
 import { User } from "@prisma/client";
+import { mongoObjectId } from "./../utils/mongodbID";
 
 const BASE_URL = "http://localhost:3000/api/reminders";
 
@@ -258,17 +259,20 @@ export const reminderApi = createApi({
     }),
     updateReminder: builder.mutation<
       Reminder,
-      Pick<
+      { reminderTitle: string } & Pick<
         Reminder,
         "id" | "title" | "date" | "time" | "priority" | "categoryTitle"
       >
     >({
-      query: ({ ...reminder }) => ({
-        url: "/",
+      query: ({ reminderTitle, ...reminder }) => ({
+        url: `/${reminderTitle}`,
         method: "PATCH",
         body: reminder,
       }),
-      async onQueryStarted({ ...reminder }, { dispatch, queryFulfilled }) {
+      async onQueryStarted(
+        { reminderTitle, ...reminder },
+        { dispatch, queryFulfilled }
+      ) {
         const updateResult = dispatch(
           reminderApi.util.updateQueryData(
             "getReminders",
@@ -279,15 +283,15 @@ export const reminderApi = createApi({
                 "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
               >[]
             ) => {
-              draft = draft.map((oldReminder) => {
-                if (oldReminder.id === reminder.id) {
+              const newDraft = draft.map((oldReminder) => {
+                if (oldReminder.title === reminderTitle) {
                   console.log(reminder);
                   return reminder;
                 } else {
                   return oldReminder;
                 }
               });
-              return draft;
+              return newDraft;
             }
           )
         );

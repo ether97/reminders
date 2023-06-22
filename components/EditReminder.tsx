@@ -53,8 +53,8 @@ const EditReminder: React.FC<{
   });
 
   async function onSubmit(data: EditReminderFormSchemaType) {
-    console.log(currentData.id);
-    updateReminder({ id: currentData.id, ...data })
+    console.log(currentData.title);
+    updateReminder({ reminderTitle: currentData.title, ...data })
       .then(() => {
         document.getElementById("closeDialog")?.click();
         toast.success("Reminder updated!");
