@@ -12,7 +12,10 @@ import { Row, RowModel } from "@tanstack/table-core";
 
 const Combine: React.FC<{
   flatRows: Row<
-    Pick<Reminder, "title" | "date" | "time" | "priority" | "id">
+    Pick<
+      Reminder,
+      "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
+    >
   >[];
 }> = ({ flatRows }) => {
   const data = flatRows.map((item) => {

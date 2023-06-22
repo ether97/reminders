@@ -12,7 +12,11 @@ const ReminderList = () => {
   let content = [];
 
   if (isLoading) {
-    content.push(<p>Loading...</p>);
+    content.push(
+      <p className="text-center animate-pulse text-zinc-400 text-[20px]">
+        Loading...
+      </p>
+    );
   } else if (data) {
     content.push(
       <div className="flex flex-col w-full h-fit">

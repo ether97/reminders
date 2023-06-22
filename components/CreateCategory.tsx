@@ -30,7 +30,8 @@ const CreateCategory: React.FC<{ currentUser: User; disabled?: boolean }> = ({
   const [addCategory] = useAddCategoryMutation();
   const [title, setTitle] = useState("");
 
-  async function onSubmit() {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     console.log(title);
     addCategory(title)
       .then(() => {
@@ -65,7 +66,10 @@ const CreateCategory: React.FC<{ currentUser: User; disabled?: boolean }> = ({
                 onSubmit={onSubmit}
                 className="flex flex-col w-full color-white"
               >
-                <Input type="text" onChange={(e) => setTitle(e.currentTarget.value)} />
+                <Input
+                  type="text"
+                  onChange={(e) => setTitle(e.currentTarget.value)}
+                />
 
                 <Button
                   type="submit"
