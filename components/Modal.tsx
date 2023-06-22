@@ -1,91 +1,68 @@
 "use client";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../components/ui/dialog";
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-
-import CreateReminder from "./CreateReminder";
-import EditReminder from "./EditReminder";
-
-import LoginForm from "./LoginForm";
-import RegisterForm from "./RegisterForm";
-import Subcategory from "./Subcategory";
-import { Button } from "./ui/button";
-import { Reminder, User } from "@prisma/client";
-
-import { IconType } from "react-icons";
-import { BsPenFill } from "react-icons/bs";
-import getCurrentUser from "@/app/actions/getCurrentUser";
-
-const labels = ["Login", "Register", "Create Reminder"];
-
-const Modal: React.FC<{
-  label: string | undefined;
-  icon?: IconType | null;
-  data: Partial<Reminder>;
-  currentUser?: User | null;
-  disabled?: boolean;
-}> = ({ label, icon, data, currentUser, disabled }) => {
+const Modal = () => {
   return (
-    <Dialog>
-      <DialogTrigger
-        className={`${label && labels.includes(label) ? "w-full" : ""}`}
-        disabled={disabled}
+    <div
+      className="
+      justify-center
+      items-center
+      flex
+      overflow-x-hidden
+      overflow-y-hidden
+      fixed
+      inset-0
+      z-50
+      outline-none
+      focus:outline-none
+      bg-neutral-800/70
+    "
+    >
+      <div
+        className="
+        relative 
+        w-full
+        md:w-4/6
+        lg:w-3/6
+        xl:w-2/5
+        my-6
+        mx-auto
+        h-full
+        lg:h-auto
+        md:h-auto
+      "
       >
-        {label && labels?.includes(label) ? (
-          <Subcategory
-            label={label}
-            icon={icon}
-            className={`${disabled && "bg-gray-700 cursor-not-allowed"}`}
-            inverted={disabled ? true : false}
-          />
-        ) : (
-          <BsPenFill size={24} className="text-white" />
-        )}
-      </DialogTrigger>
-      <DialogContent className="relative">
-        <DialogHeader>
-          <DialogTitle className="text-center py-2">{label}</DialogTitle>
-          <DialogDescription></DialogDescription>
-        </DialogHeader>
-        {label === "Login" ? (
-          <LoginForm />
-        ) : label === "Register" ? (
-          <RegisterForm />
-        ) : label === "Create Reminder" && !currentUser ? (
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="login">
-              <AccordionTrigger>
-                <p className="text-center text-zinc-400 font-light">
-                  Log in to continue...
-                </p>
-              </AccordionTrigger>
-              <AccordionContent>
-                <LoginForm />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        ) : label === "Create Reminder" && currentUser ? (
-          <CreateReminder />
-        ) : (
-          <EditReminder currentData={data} />
-        )}
-        <DialogFooter></DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <div
+          className="
+          translate
+          duration-300
+          h-full
+          ${showModal ? 'translate-y-0' : 'translate-y-full'}
+          ${showModal ? 'opacity-100' : 'opacity-0'}
+        "
+        >
+          <div
+            className="
+            translate
+            h-full
+            lg:h-auto
+            md:h-auto
+            border-0
+            rounded-lg
+            shadow-lg
+            relative
+            flex
+            flex-col
+            w-full
+            bg-white
+            outline-none
+            focus:outline-none
+          "
+          >
+            <button>I'm a modal</button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { BsPenFill } from "react-icons/bs";
 
 const HomeClient: React.FC<{ currentUser: User | null }> = ({
   currentUser,
@@ -50,15 +51,15 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
   let content;
 
   if (data) {
-    if (window.innerWidth > 600) {
-      content = <DataTable columns={columns} data={data} />;
-    } else if (window.innerWidth < 600) {
-      console.log(window.innerWidth);
-      content = (
-        <>
+    content = (
+      <>
+        <div className="hidden sm:block">
+          <DataTable columns={columns} data={data} />;
+        </div>
+        <div className="block sm:hidden">
           {data.map((item) => (
             <Card
-              className={` w-full border-none my-2
+              className={`w-full border-none my-2 
               ${
                 item.priority === "High"
                   ? "bg-gradient-to-br from-rose-800"
@@ -68,16 +69,22 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
                   ? "bg-gradient-to-br from-green-700"
                   : ""
               }
-      `}
+                `}
             >
               <CardHeader>
                 <CardTitle className="flex flex-row justify-between w-full">
                   {item.title}
-                  <AiOutlineCloseCircle
-                    onClick={handleClick}
-                    size={20}
-                    className=" cursor-pointer  text-zinc-400 hover:scale-125 hover:text-black transition duration-200 hover:rotate-180"
-                  />
+                  <div className="flex flex-row gap-2 items-center">
+                    <BsPenFill
+                      size={16}
+                      className="text-white cursor-pointer hover:scale-125 transition duration-300 ease-in-out"
+                    />
+                    <AiOutlineCloseCircle
+                      onClick={handleClick}
+                      size={20}
+                      className=" cursor-pointer  text-rose-600 hover:scale-125 transition duration-200 hover:rotate-180"
+                    />
+                  </div>
                 </CardTitle>
                 <CardDescription>{item.categoryTitle ?? ""}</CardDescription>
               </CardHeader>
@@ -89,9 +96,9 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
               </CardFooter>
             </Card>
           ))}
-        </>
-      );
-    }
+        </div>
+      </>
+    );
 
     return (
       <>
