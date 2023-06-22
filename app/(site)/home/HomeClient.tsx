@@ -6,16 +6,8 @@ import { DataTable } from "@/components/Table/DataTable";
 import { columns } from "../../../components/Table/ReminderColumns";
 import { User } from "@prisma/client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { AiOutlineCloseCircle } from "react-icons/ai";
-import { BsPenFill } from "react-icons/bs";
+
+
 import { ImMenu } from "react-icons/im";
 import { RxDropdownMenu } from "react-icons/rx";
 
@@ -31,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import LoginForm from "@/components/LoginForm";
 import RegisterForm from "@/components/RegisterForm";
+import DataCard from "@/components/DataCard";
 
 const HomeClient: React.FC<{ currentUser: User | null }> = ({
   currentUser,
@@ -39,7 +32,6 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
     document.getElementById("innerSheet")?.click();
     document.getElementById("outerSheet")?.click();
   };
-  const handleClick = () => {};
   const { data, isLoading, error } = useGetRemindersQuery();
   console.log(data);
 
@@ -143,44 +135,7 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
         </div>
         <div className="block sm:hidden">
           {data.map((item) => (
-            <Card
-              key={item.title}
-              className={`w-full border-none my-2 
-              ${
-                item.priority === "High"
-                  ? "bg-gradient-to-br from-rose-800"
-                  : item.priority === "Medium"
-                  ? "bg-gradient-to-br from-orange-600"
-                  : item.priority === "Low"
-                  ? "bg-gradient-to-br from-green-700"
-                  : ""
-              }
-                `}
-            >
-              <CardHeader>
-                <CardTitle className="flex flex-row justify-between w-full">
-                  {item.title}
-                  <div className="flex flex-row gap-2 items-center">
-                    <BsPenFill
-                      size={16}
-                      className="text-white cursor-pointer hover:scale-125 transition duration-300 ease-in-out"
-                    />
-                    <AiOutlineCloseCircle
-                      onClick={handleClick}
-                      size={20}
-                      className=" cursor-pointer  text-rose-600 hover:scale-125 transition duration-200 hover:rotate-180"
-                    />
-                  </div>
-                </CardTitle>
-                <CardDescription>{item.categoryTitle ?? ""}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>description</p>
-              </CardContent>
-              <CardFooter>
-                <p>{item.date}</p>
-              </CardFooter>
-            </Card>
+            <DataCard key={item.title} item={item} />
           ))}
         </div>
       </>
