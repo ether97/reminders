@@ -13,7 +13,7 @@ export async function DELETE(request: Request) {
 
   const user = await prisma.reminder.deleteMany({
     where: {
-      id: currentUser.id,
+      userId: currentUser.id,
     },
   });
 

@@ -24,6 +24,8 @@ import { Button } from "@/components/ui/button";
 import LoginForm from "@/components/LoginForm";
 import RegisterForm from "@/components/RegisterForm";
 import DataCard from "@/components/DataCard";
+import SheetParent from "@/components/SheetParent";
+import CategoryList from "@/components/CategoryList";
 
 const HomeClient: React.FC<{ currentUser: User | null }> = ({
   currentUser,
@@ -56,47 +58,26 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
                 <SheetTitle></SheetTitle>
                 <SheetDescription className="flex flex-col gap-y-4 items-center justify-center h-full w-full">
                   <SheetClose id="innerSheet" />
-                  <Sheet>
-                    <SheetTrigger>
+                  <SheetParent
+                    trigger={
                       <Button className="bg-lightbackground text-white w-[100px]">
                         Login
                       </Button>
-                    </SheetTrigger>
-                    <SheetContent
-                      position="left"
-                      size="full"
-                      className="h-1/2 border-none bg-neutral-800/10"
-                    >
-                      <SheetHeader className="flex flex-col h-full  items-center justify-center">
-                        <SheetTitle></SheetTitle>
-                        <SheetDescription className="flex flex-col gap-y-4 items-center justify-center h-full w-full">
-                          <SheetClose id="outerSheet" />
-                          <LoginForm mobile />
-                        </SheetDescription>
-                      </SheetHeader>
-                    </SheetContent>
-                  </Sheet>
-
-                  <Sheet>
-                    <SheetTrigger>
+                    }
+                    content={<LoginForm mobile />}
+                    position="left"
+                    type="outer"
+                  />
+                  <SheetParent
+                    trigger={
                       <Button className="bg-lightbackground text-white w-[100px]">
                         Register
                       </Button>
-                    </SheetTrigger>
-                    <SheetContent
-                      position="left"
-                      size="full"
-                      className="h-1/2 border-none bg-neutral-800/10"
-                    >
-                      <SheetHeader className="flex flex-col h-full  items-center justify-center">
-                        <SheetTitle></SheetTitle>
-                        <SheetDescription className="flex flex-col gap-y-4 items-center justify-center h-full w-full">
-                          <SheetClose id="outerSheet" />
-                          <RegisterForm mobile />
-                        </SheetDescription>
-                      </SheetHeader>
-                    </SheetContent>
-                  </Sheet>
+                    }
+                    content={<RegisterForm mobile />}
+                    position="left"
+                    type="outer"
+                  />
                 </SheetDescription>
               </SheetHeader>
             </SheetContent>
@@ -134,9 +115,12 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
           <DataTable columns={columns} data={data} />
         </div>
         <div className="block sm:hidden">
-          {data.map((item) => (
-            <DataCard key={item.title} item={item} />
-          ))}
+          <CategoryList />
+          {data.map((item) => {
+            if (!item.categoryTitle) {
+              return <DataCard key={item.title} item={item} />;
+            }
+          })}
         </div>
       </>
     );
@@ -149,7 +133,7 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
             {currentUser.name}
           </span>
         </div>
-        <div className="text-[25px] text-zinc-400 font-extralight">
+        <div className="text-[25px] text-zinc-400 font-extralight mb-3">
           Here are your reminders...
         </div>
         {content}
