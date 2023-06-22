@@ -14,6 +14,7 @@ module.exports = {
         lightbackground: "#075985",
         darkbackground: "#172554",
         lightestbackground: "#a5f3fc",
+        blur: "var(--blur)",
       },
       keyframes: {
         "accordion-down": {

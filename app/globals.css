@@ -23,6 +23,7 @@ body,
   :root {
     --background: "#172554";
     --foreground: "yellow";
+    --blur: rgba(255, 255, 255, 0.2);
   }
 
   .dark {

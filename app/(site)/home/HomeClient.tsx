@@ -14,10 +14,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const HomeClient: React.FC<{ currentUser: User | null }> = ({
   currentUser,
 }) => {
+  const handleClick = () => {};
+
   if (!currentUser) {
     return (
       <div className="text-[25px] text-zinc-400 font-extralight animate-bounce">
@@ -55,20 +58,28 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
         <>
           {data.map((item) => (
             <Card
-              className={`border-[3px] ${
+              className={` w-full border-none my-2
+              ${
                 item.priority === "High"
-                  ? "border-rose-800"
+                  ? "bg-gradient-to-br from-rose-800"
                   : item.priority === "Medium"
-                  ? "border-orange-600"
+                  ? "bg-gradient-to-br from-orange-600"
                   : item.priority === "Low"
-                  ? "border-green-700"
+                  ? "bg-gradient-to-br from-green-700"
                   : ""
-              } w-full
+              }
       `}
             >
               <CardHeader>
-                <CardTitle>{item.title}</CardTitle>
-                <CardDescription>Card Description</CardDescription>
+                <CardTitle className="flex flex-row justify-between w-full">
+                  {item.title}
+                  <AiOutlineCloseCircle
+                    onClick={handleClick}
+                    size={20}
+                    className=" cursor-pointer  text-zinc-400 hover:scale-125 hover:text-black transition duration-200 hover:rotate-180"
+                  />
+                </CardTitle>
+                <CardDescription>{item.categoryTitle ?? ""}</CardDescription>
               </CardHeader>
               <CardContent>
                 <p>description</p>
