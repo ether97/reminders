@@ -26,6 +26,8 @@ import RegisterForm from "@/components/RegisterForm";
 import DataCard from "@/components/DataCard";
 import SheetParent from "@/components/SheetParent";
 import CategoryList from "@/components/CategoryList";
+import CreateReminder from "@/components/CreateReminder";
+import CreateCategory from "@/components/CreateCategory";
 
 const HomeClient: React.FC<{ currentUser: User | null }> = ({
   currentUser,
@@ -50,34 +52,35 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
               />
             </SheetTrigger>
             <SheetContent
-              position="right"
-              size="full"
+              side="right"
               className="h-1/2 border-none bg-neutral-800/10"
             >
               <SheetHeader className="flex flex-col h-full  items-center justify-center">
                 <SheetTitle></SheetTitle>
                 <SheetDescription className="flex flex-col gap-y-4 items-center justify-center h-full w-full">
                   <SheetClose id="innerSheet" />
-                  <SheetParent
-                    trigger={
-                      <Button className="bg-lightbackground text-white w-[100px]">
-                        Login
-                      </Button>
-                    }
-                    content={<LoginForm mobile />}
-                    position="left"
-                    type="outer"
-                  />
-                  <SheetParent
-                    trigger={
-                      <Button className="bg-lightbackground text-white w-[100px]">
-                        Register
-                      </Button>
-                    }
-                    content={<RegisterForm mobile />}
-                    position="left"
-                    type="outer"
-                  />
+                  <div className="w-1/2 flex flex-col gap-y-4">
+                    <SheetParent
+                      trigger={
+                        <Button className="bg-lightbackground text-white w-full">
+                          Login
+                        </Button>
+                      }
+                      content={<LoginForm mobile />}
+                      position="left"
+                      type="outer"
+                    />
+                    <SheetParent
+                      trigger={
+                        <Button className="bg-lightbackground text-white w-full">
+                          Register
+                        </Button>
+                      }
+                      content={<RegisterForm mobile />}
+                      position="left"
+                      type="outer"
+                    />
+                  </div>
                 </SheetDescription>
               </SheetHeader>
             </SheetContent>
@@ -111,10 +114,10 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
   if (data) {
     content = (
       <>
-        <div className="hidden sm:block">
+        <div className="hidden lg:block">
           <DataTable columns={columns} data={data} />
         </div>
-        <div className="block sm:hidden">
+        <div className="block lg:hidden">
           <CategoryList />
           {data.map((item) => {
             if (!item.categoryTitle) {
@@ -127,11 +130,59 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
 
     return (
       <>
-        <div className="text-[35px] text-neutral-900">
-          Welcome back,{" "}
-          <span className="font-semibold text-[50px] text-black">
-            {currentUser.name}
-          </span>
+        <div className="flex flex-row justify-between text-[35px] items-center text-black">
+          <div>
+            Welcome back,{" "}
+            <span className="font-semibold text-[50px] text-black">
+              {currentUser.name}
+            </span>
+          </div>
+          <Sheet>
+            <SheetTrigger>
+              <RxDropdownMenu
+                size={40}
+                className="cursor-pointer text-zinc-400 block sm:hidden"
+              />
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="h-1/2 border-none bg-neutral-800/10"
+            >
+              <SheetHeader className="flex flex-col h-full  items-center justify-center">
+                <SheetTitle></SheetTitle>
+                <SheetDescription className="flex flex-col gap-y-4 items-center justify-center h-full w-full">
+                  <SheetClose id="innerSheet" />
+                  <div className="w-1/2 flex flex-col gap-y-4">
+                    <SheetParent
+                      trigger={
+                        <Button className="bg-lightbackground text-white w-full">
+                          CreateReminder
+                        </Button>
+                      }
+                      content={
+                        <CreateReminder currentUser={currentUser} mobile />
+                      }
+                      position="left"
+                      type="outer"
+
+                    />
+                    <SheetParent
+                      trigger={
+                        <Button className="bg-lightbackground text-white w-full">
+                          Create Category
+                        </Button>
+                      }
+                      content={
+                        <CreateCategory currentUser={currentUser} mobile />
+                      }
+                      position="left"
+                      type="outer"
+                    />
+                  </div>
+                </SheetDescription>
+              </SheetHeader>
+            </SheetContent>
+          </Sheet>
         </div>
         <div className="text-[25px] text-zinc-400 font-extralight mb-3">
           Here are your reminders...

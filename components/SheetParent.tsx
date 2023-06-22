@@ -32,8 +32,7 @@ const SheetParent: React.FC<SheetParentProps> = ({
                       </Button> */}
       </SheetTrigger>
       <SheetContent
-        position={position}
-        size="full"
+        side={position}
         className="h-1/2 border-none bg-neutral-800/10"
       >
         <SheetHeader className="flex flex-col h-full  items-center justify-center">

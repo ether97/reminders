@@ -14,6 +14,18 @@ import {
 import { GrFormClose } from "react-icons/gr";
 import ReminderComponent from "./Reminder";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 const Category: React.FC<{ title: string }> = ({ title }) => {
   const [deleteCategory] = useDeleteCategoryMutation();
   const { data: reminders } = useGetRemindersQuery();
@@ -32,13 +44,38 @@ const Category: React.FC<{ title: string }> = ({ title }) => {
       className="bg-lightbackground rounded-md overflow-hidden pl-4 pr-10 relative"
     >
       <AccordionItem value="item-1">
-        <AccordionTrigger>
+        <AccordionTrigger className="flex flex-row items-center justify-between w-full">
           {title}
-          <GrFormClose
-            onClick={handleClick}
-            size={20}
-            className="h-full ease-in absolute right-[10px] text-rose-700 "
-          />
+          {filtered && filtered.length > 0 ? (
+            <AlertDialog>
+              <AlertDialogTrigger className="absolute right-[10px]">
+                <GrFormClose
+                  size={20}
+                  className="h-full ease-in  text-rose-700 "
+                />
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will remove the {title} category and all its reminders.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleClick}>
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          ) : (
+            <GrFormClose
+              onClick={handleClick}
+              size={20}
+              className="h-full ease-in absolute right-[10px]  text-rose-700 "
+            />
+          )}
         </AccordionTrigger>
         <AccordionContent>
           {filtered && filtered.length > 0 ? (
