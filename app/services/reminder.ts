@@ -100,6 +100,35 @@ export const reminderApi = createApi({
         }
       },
     }),
+    deleteRemindersByCategory: builder.mutation<Reminder[], string>({
+      query: (title) => ({
+        url: "/",
+        method: "DELETE",
+      }),
+      async onQueryStarted(title, { dispatch, queryFulfilled }) {
+        const deleteResult = dispatch(
+          reminderApi.util.updateQueryData(
+            "getReminders",
+            undefined,
+            (
+              draft: Pick<
+                Reminder,
+                "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
+              >[]
+            ) => {
+              return draft.filter(
+                (reminder) => reminder.categoryTitle !== title
+              );
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          deleteResult.undo();
+        }
+      },
+    }),
     deleteReminderById: builder.mutation<Reminder, string>({
       query: (reminderId) => ({
         url: `/deleteId/${reminderId}`,

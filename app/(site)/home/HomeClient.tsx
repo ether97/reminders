@@ -6,8 +6,6 @@ import { DataTable } from "@/components/Table/DataTable";
 import { columns } from "../../../components/Table/ReminderColumns";
 import { User } from "@prisma/client";
 
-
-
 import { ImMenu } from "react-icons/im";
 import { RxDropdownMenu } from "react-icons/rx";
 
@@ -96,9 +94,9 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
   if (isLoading) {
     return (
       <>
-        <div className="text-[35px] text-neutral-900">
+        <div className="text-[35px] text-white">
           Welcome back,{" "}
-          <span className="font-semibold text-[50px] text-black">
+          <span className="font-semibold text-[50px] text-white">
             {currentUser.name}
           </span>
         </div>
@@ -130,10 +128,10 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
 
     return (
       <>
-        <div className="flex flex-row justify-between text-[35px] items-center text-black">
+        <div className="flex flex-row justify-between text-[35px] items-center text-white">
           <div>
             Welcome back,{" "}
-            <span className="font-semibold text-[50px] text-black">
+            <span className="font-semibold text-[50px] text-white">
               {currentUser.name}
             </span>
           </div>
