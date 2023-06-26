@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextFetchEvent, NextResponse } from "next/server";
 
 import prisma from "../../lib/prismadb";
 import getCurrentUser from "@/app/actions/getCurrentUser";
@@ -62,91 +62,32 @@ export async function PUT(request: Request) {
 
   console.log(data);
 
-  const result = data.reduce((acc, reminder) => {
-    const compareDates = (
-      acc: Pick<
-        Reminder,
-        "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
-      >,
-      reminder: Pick<
-        Reminder,
-        "title" | "date" | "time" | "priority" | "id" | "categoryTitle"
-      >
-    ) => {
-      if (!acc.date) {
-        return { id: reminder.id, date: reminder.date };
-      }
-      if (!reminder.date) {
-        return { id: acc.id, date: acc.date };
-      }
-      if (acc.date < reminder.date) {
-        return { id: acc.id, date: acc.date };
-      }
-      if (reminder.date < acc.date) {
-        return { id: reminder.id, date: reminder.date };
-      }
-      if (!acc.time) {
-        return {
-          id: reminder.id,
-          date: reminder.date,
-          time: reminder.time,
-        };
-      }
-      if (!reminder.time) {
-        return { id: acc.id, date: acc.date, time: acc.time };
-      }
-      if (new Date(acc.time) < new Date(reminder.time)) {
-        return { id: acc.id, date: acc.date, time: acc.time };
-      }
-      if (new Date(reminder.time) < new Date(acc.time)) {
-        return {
-          id: reminder.id,
-          date: reminder.date,
-          time: reminder.time,
-        };
-      }
-      return {
-        id: reminder.id,
-        date: reminder.date,
-        time: reminder.time,
-      };
-    };
-    const result = compareDates(reminder, acc);
-    return {
-      ...acc,
-      categoryId: reminder.categoryTitle ?? "",
-      title: `${reminder.title} ${acc.title}`,
-      date: reminder.date || result.date,
-      time: reminder.time || result.time,
-      priority: reminder.priority,
-    };
-  });
+  let earliest = "2050-06-22";
+  let title = "";
+  let priority = "";
 
-  const newObject = await prisma.reminder.create({
-    data: {
-      categoryTitle: result.categoryTitle ?? "",
-      userId: currentUser.id,
-      title: result.title,
-      date: result.date,
-      time: result.time,
-      priority: result.priority,
-    },
-  });
+  for (let reminder of data) {
+    title += reminder.title;
+    if (reminder.date < earliest) {
+      earliest = reminder.date;
+    } else if (reminder.date === earliest) {
+      if (reminder.priority === "High") {
+        priority === "High";
+      } else if (reminder.priority === "Medium" && priority !== "High") {
+        priority = "Medium";
+      }
+      priority === "Low";
+    }
+  }
 
-  const deadlines = [...(currentUser.deadlines || [])];
+  const obj = {
+    time: earliest,
+    title: title,
+    priority: priority,
+  };
+  console.log(earliest, title, priority);
 
-  deadlines.push(newObject.id);
-
-  const user = await prisma.user.update({
-    where: {
-      id: currentUser.id,
-    },
-    data: {
-      deadlines,
-    },
-  });
-
-  return NextResponse.json(user);
+  return NextResponse.json(obj);
 }
 
 export async function POST(request: Request) {

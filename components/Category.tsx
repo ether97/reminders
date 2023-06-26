@@ -4,7 +4,10 @@ import {
   useDeleteCategoryMutation,
   useGetCategoriesQuery,
 } from "@/app/services/category";
-import { useGetRemindersQuery } from "@/app/services/reminder";
+import {
+  useDeleteRemindersByCategoryMutation,
+  useGetRemindersQuery,
+} from "@/app/services/reminder";
 import {
   Accordion,
   AccordionContent,
@@ -25,16 +28,22 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { toast } from "react-hot-toast";
 
 const Category: React.FC<{ title: string }> = ({ title }) => {
   const [deleteCategory] = useDeleteCategoryMutation();
+  const [deleteReminderByCategory] = useDeleteRemindersByCategoryMutation();
   const { data: reminders } = useGetRemindersQuery();
   const filtered = reminders?.filter(
     (reminder) => reminder.categoryTitle === title
   );
   console.log(filtered);
   const handleClick = () => {
-    deleteCategory(title);
+    Promise.all([deleteCategory(title), deleteReminderByCategory(title)]).catch(
+      () => {
+        toast.success("Error removing category!");
+      }
+    );
   };
 
   return (

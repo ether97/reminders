@@ -54,17 +54,13 @@ const CreateReminder: React.FC<{
   async function onSubmit(data: ReminderFormSchemaType) {
     console.log(data);
     const ID = mongoObjectId();
-    addReminder({ id: ID, ...data })
-      .unwrap()
-      .then(() => {
-        document.getElementById("innerSheet")?.click();
-        document.getElementById("outerSheet")?.click();
-        document.getElementById("closeDialog")?.click();
-        toast.success("item added");
-      })
-      .catch(() => {
-        toast.error("item not added!");
-      });
+    form.reset();
+    document.getElementById("innerSheet")?.click();
+    document.getElementById("outerSheet")?.click();
+    document.getElementById("closeDialog")?.click();
+    addReminder({ id: ID, ...data }).catch(() => {
+      toast.error("item not added!");
+    });
   }
 
   if (mobile) {

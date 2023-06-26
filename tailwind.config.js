@@ -74,8 +74,8 @@ module.exports = {
           to: { width: "50px" },
         },
         slide: {
-          from: { opacity: 1 },
-          to: { display: "none", transform: "translateX(-1000px)" },
+          "0%": { transform: "translateX(0px)" },
+          "100%": { transform: "translateX(-1000px)" },
         },
         enlarge: {
           "0%, 100%": { background: "#082f49" },
@@ -85,7 +85,7 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        slide: "slide 1s ease-out",
+        slide: "slide 1s ease-in-out",
         enlarge: "enlarge 2s ease-in-out infinite ",
         getWide: "getWide 1s ease-in-out",
       },

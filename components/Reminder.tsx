@@ -16,6 +16,7 @@ const ReminderComponent: React.FC<{
   const [effect, setEffect] = useState(false);
 
   const handleClick = async () => {
+    setEffect(true);
     console.log(reminderTitle);
     deleteReminder(reminderTitle);
   };
@@ -32,7 +33,7 @@ const ReminderComponent: React.FC<{
           : ""
       }
       ${effect && "animate-slide"}
-      relative flex-row gap-3 items-center w-full  rounded-md text-md px-4 my-2 py-1
+      relative flex-row gap-3 items-center w-full  rounded-md text-md px-4 my-2 py-2
     `}
       onAnimationEnd={() => setEffect(false)}
     >

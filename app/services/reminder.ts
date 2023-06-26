@@ -101,11 +101,11 @@ export const reminderApi = createApi({
       },
     }),
     deleteRemindersByCategory: builder.mutation<Reminder[], string>({
-      query: (title) => ({
-        url: "/",
+      query: (reminderTitle) => ({
+        url: `/${reminderTitle}`,
         method: "DELETE",
       }),
-      async onQueryStarted(title, { dispatch, queryFulfilled }) {
+      async onQueryStarted(reminderTitle, { dispatch, queryFulfilled }) {
         const deleteResult = dispatch(
           reminderApi.util.updateQueryData(
             "getReminders",
@@ -117,7 +117,7 @@ export const reminderApi = createApi({
               >[]
             ) => {
               return draft.filter(
-                (reminder) => reminder.categoryTitle !== title
+                (reminder) => reminder.categoryTitle !== reminderTitle
               );
             }
           )
@@ -276,6 +276,7 @@ export const reminderApi = createApi({
                 };
               });
               draft.push(result);
+              return draft;
             }
           )
         );
@@ -342,4 +343,5 @@ export const {
   useCombineRemindersMutation,
   useDeleteReminderByTitleMutation,
   useDeleteAllMutation,
+  useDeleteRemindersByCategoryMutation,
 } = reminderApi;

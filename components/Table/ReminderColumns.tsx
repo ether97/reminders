@@ -61,7 +61,8 @@ export const columns: ColumnDef<
           checked={table.getIsAllPageRowsSelected()}
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         />
-        {table.getIsAllPageRowsSelected() && <DeleteAll />}
+        {(table.getIsSomeRowsSelected() ||
+          table.getIsAllPageRowsSelected()) && <DeleteAll />}
         {(table.getIsSomeRowsSelected() ||
           table.getIsAllPageRowsSelected()) && (
           <Combine flatRows={table.getSelectedRowModel().flatRows} />

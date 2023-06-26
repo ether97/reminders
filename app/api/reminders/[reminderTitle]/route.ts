@@ -3,6 +3,44 @@ import { Reminder } from "@/app/types/types";
 import prisma from "../../../lib/prismadb";
 import { NextResponse } from "next/server";
 
+export async function DELETE(
+  request: Request,
+  { params }: { params: { reminderTitle: string } }
+) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    throw new Error("Not logged in!");
+  }
+
+  const { reminderTitle } = params;
+
+  console.log(reminderTitle);
+
+  const reminders = await prisma.reminder.deleteMany({
+    where: {
+      categoryTitle: reminderTitle,
+    },
+  });
+
+  return NextResponse.json(reminders);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export async function PATCH(
   request: Request,
   { params }: { params: { reminderTitle: string } }

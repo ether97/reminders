@@ -34,15 +34,13 @@ const CreateCategory: React.FC<{
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log(title);
-    addCategory(title)
-      .then(() => {
-        document.getElementById("innerSheet")?.click();
-        document.getElementById("outerSheet")?.click();
-        toast.success("Category added!");
-      })
-      .catch(() => {
-        toast.error("Couldn&#39;t add category");
-      });
+    document.getElementById("innerSheet")?.click();
+    document.getElementById("outerSheet")?.click();
+    document.getElementById("closeDialog")?.click();
+
+    addCategory(title).catch(() => {
+      toast.error("Couldn&#39;t add category");
+    });
   }
 
   if (mobile) {

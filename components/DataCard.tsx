@@ -1,5 +1,6 @@
 "use client";
 
+import { useDeleteReminderByTitleMutation } from "@/app/services/reminder";
 import { Reminder } from "@/app/types/types";
 
 import {
@@ -10,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import toast from "react-hot-toast";
 
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { BsPenFill } from "react-icons/bs";
@@ -20,7 +22,12 @@ const DataCard: React.FC<{
     "time" | "title" | "date" | "priority" | "id" | "categoryTitle"
   >;
 }> = ({ item }) => {
-  const handleClick = () => {};
+  const [deleteReminder] = useDeleteReminderByTitleMutation();
+  const handleClick = () => {
+    deleteReminder(item.title).catch(() => {
+      toast.error("Couldnt delete reminder!");
+    });
+  };
 
   return (
     <Card
