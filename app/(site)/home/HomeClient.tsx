@@ -26,6 +26,7 @@ import SheetParent from "@/components/SheetParent";
 import CategoryList from "@/components/CategoryList";
 import CreateReminder from "@/components/CreateReminder";
 import CreateCategory from "@/components/CreateCategory";
+import { signOut } from "next-auth/react";
 
 const HomeClient: React.FC<{ currentUser: User | null }> = ({
   currentUser,
@@ -175,6 +176,12 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
                       position="left"
                       type="outer"
                     />
+                    <Button
+                      className="bg-lightbackground text-white w-full"
+                      onClick={() => signOut()}
+                    >
+                      Log Out
+                    </Button>
                   </div>
                 </SheetDescription>
               </SheetHeader>

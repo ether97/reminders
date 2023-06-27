@@ -15,11 +15,19 @@ import toast from "react-hot-toast";
 
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { BsPenFill } from "react-icons/bs";
+import EditReminder from "./EditReminder";
+import SheetParent from "./SheetParent";
 
 const DataCard: React.FC<{
   item: Pick<
     Reminder,
-    "time" | "title" | "date" | "priority" | "id" | "categoryTitle"
+    | "time"
+    | "title"
+    | "date"
+    | "priority"
+    | "id"
+    | "categoryTitle"
+    | "description"
   >;
 }> = ({ item }) => {
   const [deleteReminder] = useDeleteReminderByTitleMutation();
@@ -28,6 +36,8 @@ const DataCard: React.FC<{
       toast.error("Couldnt delete reminder!");
     });
   };
+
+  const handleEdit = () => {};
 
   return (
     <Card
@@ -48,9 +58,16 @@ const DataCard: React.FC<{
         <CardTitle className="flex flex-row justify-between w-full">
           {item.title}
           <div className="flex flex-row gap-2 items-center">
-            <BsPenFill
-              size={16}
-              className="text-white cursor-pointer hover:scale-125 transition duration-300 ease-in-out"
+            <SheetParent
+              trigger={
+                <BsPenFill
+                  size={20}
+                  className="text-green-500 hover:scale-125 transition duration-300 ease-in-out"
+                />
+              }
+              content={<EditReminder currentData={item} mobile />}
+              position="left"
+              type="outer"
             />
             <AiOutlineCloseCircle
               onClick={handleClick}
@@ -61,9 +78,7 @@ const DataCard: React.FC<{
         </CardTitle>
         <CardDescription>{item.categoryTitle ?? ""}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <p>description</p>
-      </CardContent>
+      <CardContent>{item.description ?? <p>No description...</p>}</CardContent>
       <CardFooter>
         <p>{item.date}</p>
       </CardFooter>

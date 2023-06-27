@@ -26,24 +26,51 @@ import { useState } from "react";
 import Subcategory from "./Subcategory";
 import { User } from "@prisma/client";
 
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import dotenv from "dotenv";
+import AWS from "aws-sdk";
+
+dotenv.config();
+
 const RegisterForm: React.FC<{
   disabled?: boolean;
   currentUser?: User | null;
   mobile?: boolean;
 }> = ({ disabled, currentUser, mobile }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
 
   const form = useForm<RegisterFormSchemaType>({
     resolver: zodResolver(registerFormSchema),
   });
 
-  const onSubmit: SubmitHandler<RegisterFormSchemaType> = (data) => {
-    console.log(data);
+  const selectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedFile(e.target.files?.[0]);
+  };
+
+  const onSubmit: SubmitHandler<RegisterFormSchemaType> = async (data) => {
+    // console.log(selectedFile);
+    // if (!selectedFile) {
+    //   return null;
+    // }
+    // const s3Data = await axios.post("/api/s3", {
+    //   name: selectedFile.name,
+    //   type: selectedFile.type,
+    // });
+
+    // const url = s3Data.data.url;
+
+    // console.log(url);
+
+    // await axios.put(url, selectedFile, {
+    //   headers: {
+    //     "Content-type": selectedFile.type,
+    //     "Access-Control-Allow-Origin": "*",
+    //   },
+    // });
 
     axios
-      .post("/api/register", {
-        ...data,
-      })
+      .post("/api/register", data)
       .then((response) => {
         document.getElementById("closeDialog")?.click();
 
@@ -120,7 +147,7 @@ const RegisterForm: React.FC<{
   }
   return (
     <Dialog>
-      <DialogTrigger className="w-full">
+      <DialogTrigger className="w-full" disabled={currentUser ? true : false}>
         <Subcategory
           label="Register"
           icon={FaUserPlus}
@@ -187,6 +214,7 @@ const RegisterForm: React.FC<{
                     message={form.formState.errors.confirmPassword?.message}
                   />
                 )}
+                {/* <Input type="file" onChange={(e) => selectFile(e)} /> */}
                 <Button
                   type="submit"
                   // disabled={isSubmitting}

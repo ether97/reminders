@@ -12,7 +12,7 @@ const DeleteAll = () => {
       className="text-rose-800 cursor-pointer"
       onClick={() => {
         deleteAll().then(() => {
-          toast.success("All deadlines removed!");
+          toast.success("Deadlines removed!");
         });
       }}
     />

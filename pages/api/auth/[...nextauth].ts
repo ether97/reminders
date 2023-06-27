@@ -53,9 +53,13 @@ export const authOptions: AuthOptions = {
 
         console.log(isCorrect);
 
+
+
         if (!isCorrect) {
           throw new Error("invalid password!");
         }
+
+        
 
         return user;
       },

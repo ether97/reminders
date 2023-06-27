@@ -33,13 +33,18 @@ import { editReminderFormSchema } from "@/app/schemas/schemas";
 import { EditReminderFormSchemaType } from "@/app/schemas/schemas";
 import { useUpdateReminderMutation } from "@/app/services/reminder";
 import { BsPenFill } from "react-icons/bs";
+import { useState } from "react";
+import SheetParent from "./SheetParent";
 
 const EditReminder: React.FC<{
   currentData: Pick<
     Reminder,
     "title" | "date" | "time" | "priority" | "id" | "description"
   >;
-}> = ({ currentData }) => {
+  mobile?: boolean;
+}> = ({ currentData, mobile }) => {
+  const [date, setDate] = useState<any>(null);
+  const [dateCheck, setDateCheck] = useState(true);
   const [updateReminder] = useUpdateReminderMutation();
   const form = useForm<EditReminderFormSchemaType>({
     resolver: zodResolver(editReminderFormSchema),
@@ -54,12 +59,89 @@ const EditReminder: React.FC<{
 
   async function onSubmit(data: EditReminderFormSchemaType) {
     console.log(currentData.title);
-    updateReminder({ reminderTitle: currentData.title, ...data })
-      .then(() => {
-        document.getElementById("closeDialog")?.click();
-        toast.success("Reminder updated!");
-      })
-      .catch(() => toast.error("Couldnt update reminder!"));
+    document.getElementById("closeDialog")?.click();
+
+    updateReminder({ reminderTitle: currentData.title, ...data }).catch(() =>
+      toast.error("Couldnt update reminder!")
+    );
+  }
+
+  if (mobile) {
+    return (
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col w-full"
+      >
+        <div className="flex flex-col gap-y-3 my-2">
+          <Label htmlFor="Title" className="text-white">
+            Title:{" "}
+          </Label>
+
+          <Input
+            type="text"
+            id="Title"
+            placeholder="Enter title..."
+            {...form.register("title")}
+          />
+        </div>
+        <div className="flex flex-col gap-y-3 my-2">
+          <Label htmlFor="Description">Description: </Label>
+          <Textarea {...form.register("description")} />
+        </div>
+        <div className="flex flex-row gap-5 my-2 w-full">
+          <div className="flex flex-row gap-x-2 items-center">
+            <Label htmlFor="date" className="text-white">
+              Date:{" "}
+            </Label>
+            <Input
+              type="date"
+              onSelect={setDate}
+              min={new Date().toISOString().split("T")[0]}
+              // defaultValue={date}
+              {...form.register("date")}
+              className={`focus:outline-none ${
+                !dateCheck ? "border-rose-600 text-rose-600" : ""
+              }`}
+              onClick={() => setDateCheck(true)}
+            />
+          </div>
+          <div className="flex flex-row gap-x-2 items-center flex-1">
+            <Label htmlFor="time" className="text-white">
+              Time:{" "}
+            </Label>
+            <Input
+              type="time"
+              id="time"
+              {...form.register("time")}
+              className="w-full"
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-row gap-x-3 my-2 items-center">
+          <Label htmlFor="priority" className="text-white">
+            Priority:{" "}
+          </Label>
+          <select
+            {...form.register("priority")}
+            className="flex-1 text-white h-10 items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {["High", "Medium", "Low"].map((item) => (
+              <option
+                key={item}
+                value={item}
+                className="bg-background h-[10px] cursor-pointer transition hover:bg-white hover:text-black text-white"
+              >
+                {item}
+              </option>
+            ))}
+          </select>
+        </div>
+        <Button type="submit" className="bg-lightbackground my-2">
+          Edit
+        </Button>
+      </form>
+    );
   }
 
   return (
@@ -72,7 +154,7 @@ const EditReminder: React.FC<{
       </DialogTrigger>
       <DialogContent className="relative">
         <DialogHeader>
-          <DialogTitle className="text-center py-2">
+          <DialogTitle className="text-center py-2 text-white">
             {currentData.title}
           </DialogTitle>
           <DialogDescription>
@@ -81,7 +163,9 @@ const EditReminder: React.FC<{
               className="flex flex-col w-full"
             >
               <div className="flex flex-col gap-y-3 my-2">
-                <Label htmlFor="Title">Title: </Label>
+                <Label htmlFor="Title" className="text-white">
+                  Title:{" "}
+                </Label>
 
                 <Input
                   type="text"
@@ -94,26 +178,49 @@ const EditReminder: React.FC<{
                 <Label htmlFor="Description">Description: </Label>
                 <Textarea {...form.register("description")} />
               </div>
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>
-                    Will this reminder repeat?
-                  </AccordionTrigger>
-                  <AccordionContent></AccordionContent>
-                </AccordionItem>
-              </Accordion>
+              <div className="flex flex-row gap-5 my-2 w-full">
+                <div className="flex flex-row gap-x-2 items-center">
+                  <Label htmlFor="date" className="text-white">
+                    Date:{" "}
+                  </Label>
+                  <Input
+                    type="date"
+                    onSelect={setDate}
+                    min={new Date().toISOString().split("T")[0]}
+                    // defaultValue={date}
+                    {...form.register("date")}
+                    className={`focus:outline-none ${
+                      !dateCheck ? "border-rose-600 text-rose-600" : ""
+                    }`}
+                    onClick={() => setDateCheck(true)}
+                  />
+                </div>
+                <div className="flex flex-row gap-x-2 items-center flex-1">
+                  <Label htmlFor="time" className="text-white">
+                    Time:{" "}
+                  </Label>
+                  <Input
+                    type="time"
+                    id="time"
+                    {...form.register("time")}
+                    className="w-full"
+                  />
+                </div>
+              </div>
 
               <div className="flex flex-row gap-x-3 my-2 items-center">
-                <Label htmlFor="priority">Priority: </Label>
+                <Label htmlFor="priority" className="text-white">
+                  Priority:{" "}
+                </Label>
                 <select
                   {...form.register("priority")}
-                  className="flex-1 h-10 items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex-1 text-white h-10 items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {["High", "Medium", "Low"].map((item) => (
                     <option
                       key={item}
                       value={item}
-                      className="bg-background h-[10px] cursor-pointer transition hover:bg-white hover:text-black"
+                      className="bg-background h-[10px] cursor-pointer transition hover:bg-white hover:text-black text-white"
                     >
                       {item}
                     </option>
