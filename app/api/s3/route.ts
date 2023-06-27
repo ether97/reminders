@@ -33,11 +33,3 @@ export async function POST(request: Request) {
 
   return NextResponse.json({ url: url });
 }
-
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: "8mb",
-    },
-  },
-};
