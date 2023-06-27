@@ -58,7 +58,7 @@ const Modal = () => {
             focus:outline-none
           "
           >
-            <button>I'm a modal</button>
+            <button>I&apos;m a modal</button>
           </div>
         </div>
       </div>
