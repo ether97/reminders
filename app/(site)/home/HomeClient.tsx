@@ -200,3 +200,4 @@ const HomeClient: React.FC<{ currentUser: User | null }> = ({
 };
 
 export default HomeClient;
+
